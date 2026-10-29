@@ -12,7 +12,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIR="$ROOT/assets/app-icon"
 SVG="$DIR/pdfcraft.svg"
-ID="ai.storyteller.pdfcraft"
+ID="io.github.tomblanchard312.Nabu"
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
 
@@ -44,7 +44,7 @@ mkdir -p "$DIR/hicolor/scalable/apps"
 cp "$SVG" "$DIR/hicolor/scalable/apps/$ID.svg"
 
 # Windows .ico: PNG-compressed entries, 16-256 px. The document icon has its own resource
-# in pdfcraft.exe; the app icon remains the first/default icon.
+# in nabu.exe; the app icon remains the first/default icon.
 for name in pdfcraft pdfcraft-document; do
   ICO_PNGS=()
   for s in 16 20 24 32 40 48 64 128 256; do
@@ -76,6 +76,19 @@ if command -v iconutil >/dev/null; then
   done
   iconutil -c icns -o "$DIR/pdfcraft.icns" "$SET"
 else
-  echo "warning: iconutil not found (macOS only); pdfcraft.icns not regenerated" >&2
+  for s in 16 32 64 128 256 512 1024; do
+    render "$MAC" "$s" "$TMP/mac-$s.png"
+  done
+  python3 - "$DIR/pdfcraft.icns" "$TMP" <<'ICNS'
+from pathlib import Path
+import struct, sys
+out, root = Path(sys.argv[1]), Path(sys.argv[2])
+chunks = []
+for tag, size in [(b'icp4',16),(b'icp5',32),(b'icp6',64),(b'ic07',128),(b'ic08',256),(b'ic09',512),(b'ic10',1024)]:
+    data = (root / f'mac-{size}.png').read_bytes()
+    chunks.append(tag + struct.pack('>I', len(data)+8) + data)
+body = b''.join(chunks)
+out.write_bytes(b'icns' + struct.pack('>I',len(body)+8) + body)
+ICNS
 fi
 echo "icons written to $DIR"

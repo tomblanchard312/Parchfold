@@ -3,8 +3,8 @@
 //! Without a logger every `log::warn!`/`log::error!` in the workspace (a failed autosave, a page
 //! that would not render, a render worker that could not start, the panic hook's report) vanished.
 //! A launch from a desktop menu has no terminal, so the file is what a bug report can attach:
-//! `<data dir>/logs/pdfcraft.log` (the PdfCraft eframe storage directory, or portable data). Each
-//! start moves the previous log to `pdfcraft.1.log` (and that one to `.2`), so the log of a run
+//! `<data dir>/logs/nabu.log` (the Parchfold eframe storage directory, or portable data). Each
+//! start moves the previous log to `nabu.1.log` (and that one to `.2`), so the log of a run
 //! that crashed survives the next launch.
 //!
 //! Levels: `info` for PdfCraft's own crates, `warn` for everything else (wgpu and naga are
@@ -26,15 +26,15 @@ use std::time::SystemTime;
 use log::LevelFilter;
 
 /// The current log file's name inside the log directory.
-pub const LOG_FILE: &str = "pdfcraft.log";
-/// How many previous logs are kept (`pdfcraft.1.log` … `pdfcraft.<KEEP>.log`).
+pub const LOG_FILE: &str = "nabu.log";
+/// How many previous logs are kept (`nabu.1.log` … `nabu.<KEEP>.log`).
 pub const KEEP: usize = 2;
 /// The log file stops growing past this size (a runaway warning can't fill the disk).
 pub const MAX_FILE_BYTES: u64 = 16 * 1024 * 1024;
 /// Records kept in memory until the log file is attached.
 pub const MAX_PENDING: usize = 512;
 /// The built-in filter when `RUST_LOG` is unset or empty.
-pub const DEFAULT_FILTER: &str = "warn,pdfcraft*=info";
+pub const DEFAULT_FILTER: &str = "warn,pdfcraft*=info,nabu*=info";
 
 /// Per-target level filter parsed from env_logger-style directives.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -124,7 +124,7 @@ fn civil_from_days(days: u64) -> (i64, u32, u32) {
 }
 
 fn numbered(dir: &Path, n: usize) -> PathBuf {
-    if n == 0 { dir.join(LOG_FILE) } else { dir.join(format!("pdfcraft.{n}.log")) }
+    if n == 0 { dir.join(LOG_FILE) } else { dir.join(format!("nabu.{n}.log")) }
 }
 
 /// Shift the previous logs up one (`.log` → `.1.log` → … → `.<KEEP>.log`, the oldest dropped)
@@ -287,6 +287,8 @@ mod tests {
         let f = Filter::parse(DEFAULT_FILTER);
         assert_eq!(f.level_for("pdfcraft"), LevelFilter::Info);
         assert_eq!(f.level_for("pdfcraft::updates"), LevelFilter::Info);
+        assert_eq!(f.level_for("nabu"), LevelFilter::Info);
+        assert_eq!(f.level_for("nabu::logging"), LevelFilter::Info);
         assert_eq!(f.level_for("pdfcraft_ui_egui::recovery"), LevelFilter::Info);
         assert_eq!(f.level_for("pdfcraft_render::raster"), LevelFilter::Info);
         assert_eq!(f.level_for("wgpu_core::device"), LevelFilter::Warn);
@@ -369,9 +371,9 @@ mod tests {
             std::fs::write(&path, format!("run {run}")).expect("write");
         }
         assert_eq!(read(&dir.join(LOG_FILE)), "run 4");
-        assert_eq!(read(&dir.join("pdfcraft.1.log")), "run 3");
-        assert_eq!(read(&dir.join("pdfcraft.2.log")), "run 2");
-        assert!(!dir.join("pdfcraft.3.log").exists(), "only {KEEP} old logs are kept");
+        assert_eq!(read(&dir.join("nabu.1.log")), "run 3");
+        assert_eq!(read(&dir.join("nabu.2.log")), "run 2");
+        assert!(!dir.join("nabu.3.log").exists(), "only {KEEP} old logs are kept");
         let _ = std::fs::remove_dir_all(&dir);
     }
 
@@ -446,14 +448,14 @@ mod tests {
         let record = |level, target: &'static str, msg: &'static str| {
             logger.log(&log::Record::builder().level(level).target(target).args(format_args!("{msg}")).build());
         };
-        record(log::Level::Info, "pdfcraft", "moved the PrintCraft settings");
+        record(log::Level::Info, "nabu", "moved the PrintCraft settings");
         record(log::Level::Info, "wgpu_core::device", "too chatty");
         let path = logger.attach_dir(&dir).expect("attach");
         assert_eq!(path, dir.join(LOG_FILE));
         record(log::Level::Warn, "wgpu_hal::vulkan", "a real warning");
-        record(log::Level::Debug, "pdfcraft", "below info");
+        record(log::Level::Debug, "nabu", "below info");
         let text = read(&path);
-        assert!(text.contains(" INFO  [") && text.contains("pdfcraft: moved the PrintCraft settings\n"), "{text}");
+        assert!(text.contains(" INFO  [") && text.contains("nabu: moved the PrintCraft settings\n"), "{text}");
         assert!(text.contains("wgpu_hal::vulkan: a real warning\n"), "{text}");
         assert!(!text.contains("too chatty") && !text.contains("below info"), "{text}");
         assert!(logger.enabled(&log::Metadata::builder().level(log::Level::Info).target("pdfcraft_ui_egui").build()));
@@ -487,8 +489,8 @@ mod tests {
                 .join();
         });
         assert!(logger.sink.is_poisoned());
-        logger.log(&log::Record::builder().level(log::Level::Warn).target("pdfcraft").args(format_args!("after the panic")).build());
-        assert!(read(&path).contains("pdfcraft: after the panic\n"));
+        logger.log(&log::Record::builder().level(log::Level::Warn).target("nabu").args(format_args!("after the panic")).build());
+        assert!(read(&path).contains("nabu: after the panic\n"));
         let _ = std::fs::remove_dir_all(&dir);
     }
 }

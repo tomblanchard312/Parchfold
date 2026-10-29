@@ -7,8 +7,14 @@ use egui::{Align, Layout};
 
 use crate::{PdfCraftApp, theme, widgets};
 
-/// Where every PdfCraft release is listed.
-pub const RELEASES_PAGE: &str = "https://github.com/storytold/pdfcraft/releases";
+/// Parchfold has no release feed yet. This page is informational only; this build does not install from it.
+pub const RELEASES_PAGE: &str = "https://github.com/tomblanchard312/Parchfold/releases";
+
+/// Update installation stays off until Parchfold publishes a feed of its own. The upstream PdfCraft
+/// feed must not be used: installing from it would replace this app with PdfCraft.
+fn updates_installable() -> bool {
+    false
+}
 
 /// Stands in for the network in tests.
 #[cfg(not(target_arch = "wasm32"))]
@@ -55,14 +61,11 @@ impl PdfCraftApp {
 
     /// Help ▸ Check for updates: ask for the latest release and show the outcome.
     pub fn check_for_updates(&mut self) {
+        self.updates.open = true;
+        // Do not ask the updater. It is bound to the PdfCraft suite entry and can download that app.
         #[cfg(not(target_arch = "wasm32"))]
         {
-            self.updates.open = true;
-            self.updates.check_requested = true;
-        }
-        #[cfg(target_arch = "wasm32")]
-        {
-            self.open_url(RELEASES_PAGE);
+            self.updates.check_requested = false;
         }
     }
 
@@ -70,6 +73,9 @@ impl PdfCraftApp {
     pub(crate) fn poll_updates(&mut self) {
         #[cfg(not(target_arch = "wasm32"))]
         {
+            if !updates_installable() {
+                return;
+            }
             let Some(ctx) = self.ctx.clone() else { return };
             let updates = &mut self.updates;
             if std::mem::take(&mut updates.check_requested) {
@@ -85,7 +91,7 @@ impl PdfCraftApp {
 /// The startup prompt, and the Updates dialog that answers Help ▸ Check for updates.
 pub(crate) fn dialog(app: &mut PdfCraftApp, ctx: &egui::Context) {
     #[cfg(not(target_arch = "wasm32"))]
-    {
+    if updates_installable() {
         // The restart helper is scheduled before the app closes, so no update starts over unsaved work.
         let clean = app.first_dirty().is_none();
         match app.updates.updater.show_if(ctx, clean) {
@@ -113,36 +119,46 @@ pub(crate) fn dialog(app: &mut PdfCraftApp, ctx: &egui::Context) {
             ui.label(egui::RichText::new(tl!("Check for updates")).font(theme::semibold(16.0)));
         });
         ui.add_space(8.0);
+        if !updates_installable() {
+            ui.label(tl!("Parchfold does not install updates yet."));
+            ui.label(egui::RichText::new(tl!("This build will not download or install a PdfCraft release.")).color(t.text_muted));
+        }
         #[cfg(not(target_arch = "wasm32"))]
-        match app.updates.updater.status() {
-            Status::Idle => {
-                ui.horizontal(|ui| {
-                    ui.spinner();
-                    ui.label(tl!("Checking for a newer version…"));
-                });
-            }
-            Status::Checking => {
-                ui.horizontal(|ui| {
-                    ui.spinner();
-                    ui.label(tl!("Checking for a newer version…"));
-                });
-            }
-            Status::UpToDate => {
-                ui.label(crate::i18n::fmt(tl!("PdfCraft {c} is up to date."), &[("c", current)]));
-            }
-            Status::Failed(e) => {
-                ui.label(crate::i18n::fmt(tl!("Couldn't check for updates: {e}"), &[("e", e)]));
-                ui.label(
-                    egui::RichText::new(crate::i18n::fmt(
-                        tl!("You have version {c}. All releases are listed at {page}."),
-                        &[("c", current), ("page", RELEASES_PAGE)],
-                    ))
-                    .color(t.text_muted),
-                );
+        if updates_installable() {
+            match app.updates.updater.status() {
+                Status::Idle => {
+                    ui.horizontal(|ui| {
+                        ui.spinner();
+                        ui.label(tl!("Checking for a newer version…"));
+                    });
+                }
+                Status::Checking => {
+                    ui.horizontal(|ui| {
+                        ui.spinner();
+                        ui.label(tl!("Checking for a newer version…"));
+                    });
+                }
+                Status::UpToDate => {
+                    ui.label(crate::i18n::fmt(tl!("PdfCraft {c} is up to date."), &[("c", current)]));
+                }
+                Status::Failed(e) => {
+                    ui.label(crate::i18n::fmt(tl!("Couldn't check for updates: {e}"), &[("e", e)]));
+                    ui.label(
+                        egui::RichText::new(crate::i18n::fmt(
+                            tl!("You have version {c}. All releases are listed at {page}."),
+                            &[("c", current), ("page", RELEASES_PAGE)],
+                        ))
+                        .color(t.text_muted),
+                    );
+                }
             }
         }
         #[cfg(target_arch = "wasm32")]
         let _ = (&t, current);
+        #[cfg(not(target_arch = "wasm32"))]
+        if !updates_installable() {
+            let _ = current;
+        }
         ui.add_space(10.0);
         ui.with_layout(Layout::right_to_left(Align::Center), |ui| {
             if widgets::pill_button(ui, tl!("Close"), true).clicked() {
@@ -156,6 +172,8 @@ pub(crate) fn dialog(app: &mut PdfCraftApp, ctx: &egui::Context) {
     if close {
         app.updates.open = false;
         #[cfg(not(target_arch = "wasm32"))]
-        app.updates.updater.dismiss_status();
+        if updates_installable() {
+            app.updates.updater.dismiss_status();
+        }
     }
 }

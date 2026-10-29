@@ -346,7 +346,7 @@ impl eframe::App for PdfCraftApp {
             let minimized = self.ctx.as_ref().is_some_and(|c| c.input(|i| i.viewport().minimized == Some(true)));
             self.window_state.keep(storage, minimized);
         }
-        storage.set_string("pdfcraft", self.persist());
+        storage.set_string("nabu", self.persist());
     }
 
     /// Each frame's work before drawing: opens, operating-system and control-channel requests,
@@ -551,7 +551,7 @@ impl eframe::App for PdfCraftApp {
             .active
             .and_then(|i| crate::canvas::tab_label(self, i))
             .or_else(|| self.combine_showing().then(|| tl!("Combine files").to_owned()))
-            .map_or_else(|| "PdfCraft".to_owned(), |name| format!("{name} — PdfCraft"));
+            .map_or_else(|| pdfcraft_engine::links::PRODUCT.to_owned(), |name| format!("{name} — {}", pdfcraft_engine::links::PRODUCT));
         if title != self.window_title {
             ctx.send_viewport_cmd(egui::ViewportCommand::Title(title.clone()));
             self.window_title = title;

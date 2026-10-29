@@ -1,6 +1,6 @@
-//! Windows only: embed version info (VERSIONINFO) into `pdfcraft-cli.exe`, so Explorer's
-//! Details tab, `(Get-Item pdfcraft-cli.exe).VersionInfo` and inventory tools can read the version
-//! and publisher, as they can for `pdfcraft.exe` (`apps/pdfcraft/build.rs`).
+//! Windows only: embed version info (VERSIONINFO) into `nabu-cli.exe`, so Explorer's
+//! Details tab, `(Get-Item nabu-cli.exe).VersionInfo` and inventory tools can read the version
+//! and publisher, as they can for `nabu.exe` (`apps/pdfcraft/build.rs`).
 //!
 //! On every other target this does nothing. A missing resource compiler is a warning, so a
 //! cross-compile from macOS or Linux still links, unless `PDFCRAFT_REQUIRE_WINRES=1` turns it
@@ -13,16 +13,16 @@ fn main() {
         return;
     }
     let mut res = winresource::WindowsResource::new();
-    res.set("ProductName", "PdfCraft")
-        .set("FileDescription", "PdfCraft command-line tool")
+    res.set("ProductName", "Parchfold")
+        .set("FileDescription", "Parchfold command-line tool")
         .set("LegalCopyright", "Copyright (c) the PdfCraft contributors. MIT OR Apache-2.0.")
-        .set("OriginalFilename", "pdfcraft-cli.exe")
-        .set("InternalName", "pdfcraft-cli");
+        .set("OriginalFilename", "nabu-cli.exe")
+        .set("InternalName", "nabu-cli");
     if let Err(e) = res.compile() {
         if std::env::var_os("PDFCRAFT_REQUIRE_WINRES").is_some() {
             println!("cargo::error=embedding Windows resources failed: {e}");
             return;
         }
-        println!("cargo:warning=pdfcraft-cli.exe built without version resources: {e}");
+        println!("cargo:warning=nabu-cli.exe built without version resources: {e}");
     }
 }

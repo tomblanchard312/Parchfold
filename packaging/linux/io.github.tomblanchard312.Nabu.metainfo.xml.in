@@ -2,27 +2,26 @@
 <!-- AppStream metadata (software centres, Flathub). Template: package.sh and the Flatpak
      manifest substitute @VERSION@ and @DATE@ from Cargo.toml and the build date. -->
 <component type="desktop-application">
-  <id>ai.storyteller.pdfcraft</id>
+  <id>io.github.tomblanchard312.Nabu</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT OR Apache-2.0</project_license>
-  <name>PdfCraft</name>
+  <name>Parchfold</name>
   <summary>Read, organize, combine, split and secure PDFs</summary>
   <developer id="ai.storyteller">
     <name>Learning Machines LLC</name>
   </developer>
   <description>
     <p>
-      PdfCraft is an open-source PDF workbench. Read, comment on, fill in and sign PDFs;
+      Parchfold is an open-source PDF workbench. Read, comment on, fill in and sign PDFs;
       organize, combine and split pages; edit, redact, protect and export documents.
     </p>
   </description>
-  <launchable type="desktop-id">ai.storyteller.pdfcraft.desktop</launchable>
-  <icon type="stock">ai.storyteller.pdfcraft</icon>
+  <launchable type="desktop-id">io.github.tomblanchard312.Nabu.desktop</launchable>
+  <icon type="stock">io.github.tomblanchard312.Nabu</icon>
   <!-- Only url types known to appstream 0.15 (Ubuntu 22.04, where CI validates): no vcs-browser. -->
-  <url type="homepage">https://getartcraft.com/apps/pdfcraft</url>
-  <url type="bugtracker">https://github.com/storytold/pdfcraft/issues</url>
-  <url type="help">https://github.com/storytold/pdfcraft</url>
-  <url type="contact">https://discord.gg/artcraft</url>
+  <url type="homepage">https://github.com/tomblanchard312/Parchfold</url>
+  <url type="bugtracker">https://github.com/tomblanchard312/Parchfold/issues</url>
+  <url type="help">https://github.com/tomblanchard312/Parchfold</url>
   <categories>
     <category>Office</category>
     <category>Viewer</category>
@@ -52,7 +51,7 @@
     <control>tablet</control>
   </supports>
   <provides>
-    <binary>pdfcraft</binary>
+    <binary>nabu</binary>
     <mediatype>application/pdf</mediatype>
   </provides>
   <content_rating type="oars-1.1"/>

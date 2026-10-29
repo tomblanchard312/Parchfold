@@ -1,14 +1,14 @@
 [Desktop Entry]
 Type=Application
-Name=PdfCraft
+Name=Parchfold
 GenericName=PDF Editor
 Comment=Read, organize, combine, split and secure PDFs
-Exec=pdfcraft %U
-TryExec=pdfcraft
-Icon=ai.storyteller.pdfcraft
+Exec=nabu %U
+TryExec=nabu
+Icon=io.github.tomblanchard312.Nabu
 Terminal=false
 StartupNotify=true
-StartupWMClass=ai.storyteller.pdfcraft
+StartupWMClass=io.github.tomblanchard312.Nabu
 Categories=Office;Viewer;
 Keywords=pdf;viewer;editor;annotate;sign;forms;merge;split;
 MimeType=application/pdf;

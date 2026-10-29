@@ -1,7 +1,7 @@
 {
-  "id": "pdfcraft",
-  "name": "PdfCraft",
-  "upgradeCode": "EA00C367-7270-4C50-9D8B-A7A5C88AD27F",
+  "id": "nabu",
+  "name": "Nabu",
+  "upgradeCode": "F3F4A640-9263-4017-BAC4-593EEB64C1AA",
   "sources": [
     "pdfcraft.wxs",
     "installer-ui.wxs"
@@ -14,313 +14,313 @@
     "LICENSE-MIT",
     "LICENSE-document.txt",
     "NOTICE",
-    "pdfcraft-cli.exe",
-    "pdfcraft.exe"
+    "nabu-cli.exe",
+    "nabu.exe"
   ],
   "registry": [
     [
       "-1",
-      "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\pdfcraft.exe",
+      "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\nabu.exe",
       "",
       "[#PdfcraftExe]"
     ],
     [
       "-1",
-      "Software\\Classes\\PdfCraft.Document",
+      "Software\\Classes\\Nabu.Document",
       "",
       "PDF Document"
     ],
     [
       "-1",
-      "Software\\Classes\\PdfCraft.Document\\DefaultIcon",
+      "Software\\Classes\\Nabu.Document\\DefaultIcon",
       "",
       "\"[#PdfcraftExe]\",-2"
     ],
     [
       "-1",
-      "Software\\Classes\\PdfCraft.Document\\shell\\open\\command",
+      "Software\\Classes\\Nabu.Document\\shell\\open\\command",
       "",
       "\"[#PdfcraftExe]\" \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\PdfCraft.Document",
+      "Software\\Classes\\Nabu.Document",
       "TypeOverlay",
       ""
     ],
     [
       "-1",
       "Software\\Classes\\.pdf\\OpenWithProgids",
-      "PdfCraft.Document",
+      "Nabu.Document",
       ""
     ],
     [
       "-1",
-      "Software\\Classes\\Applications\\pdfcraft.exe",
+      "Software\\Classes\\Applications\\nabu.exe",
       "FriendlyAppName",
-      "PdfCraft"
+      "Nabu"
     ],
     [
       "-1",
-      "Software\\Classes\\Applications\\pdfcraft.exe\\DefaultIcon",
+      "Software\\Classes\\Applications\\nabu.exe\\DefaultIcon",
       "",
       "\"[#PdfcraftExe]\",-2"
     ],
     [
       "-1",
-      "Software\\Classes\\Applications\\pdfcraft.exe\\SupportedTypes",
+      "Software\\Classes\\Applications\\nabu.exe\\SupportedTypes",
       ".pdf",
       ""
     ],
     [
       "-1",
-      "Software\\Classes\\Applications\\pdfcraft.exe\\shell\\open\\command",
+      "Software\\Classes\\Applications\\nabu.exe\\shell\\open\\command",
       "",
       "\"[#PdfcraftExe]\" \"%1\""
     ],
     [
       "-1",
-      "Software\\PdfCraft\\Capabilities",
+      "Software\\Nabu\\Capabilities",
       "ApplicationName",
-      "PdfCraft"
+      "Parchfold"
     ],
     [
       "-1",
-      "Software\\PdfCraft\\Capabilities",
+      "Software\\Nabu\\Capabilities",
       "ApplicationDescription",
       "Open-source PDF workbench"
     ],
     [
       "-1",
-      "Software\\PdfCraft\\Capabilities",
+      "Software\\Nabu\\Capabilities",
       "ApplicationIcon",
       "[#PdfcraftExe],0"
     ],
     [
       "-1",
-      "Software\\PdfCraft\\Capabilities\\FileAssociations",
+      "Software\\Nabu\\Capabilities\\FileAssociations",
       ".pdf",
-      "PdfCraft.Document"
+      "Nabu.Document"
     ],
     [
       "-1",
       "Software\\RegisteredApplications",
-      "PdfCraft",
-      "Software\\PdfCraft\\Capabilities"
+      "Nabu",
+      "Software\\Nabu\\Capabilities"
     ],
     [
       "-1",
-      "Software\\PdfCraft\\Shortcuts",
+      "Software\\Nabu\\Shortcuts",
       "StartMenu",
       "#1"
     ],
     [
       "-1",
-      "Software\\PdfCraft\\Shortcuts",
+      "Software\\Nabu\\Shortcuts",
       "Desktop",
       "#1"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.pdf\\shell\\PdfCraft.Edit",
+      "Software\\Classes\\SystemFileAssociations\\.pdf\\shell\\Nabu.Edit",
       "",
-      "Edit with PdfCraft"
+      "Edit with Nabu"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.pdf\\shell\\PdfCraft.Edit",
+      "Software\\Classes\\SystemFileAssociations\\.pdf\\shell\\Nabu.Edit",
       "Icon",
       "\"[#PdfcraftExe]\",0"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.pdf\\shell\\PdfCraft.Edit",
+      "Software\\Classes\\SystemFileAssociations\\.pdf\\shell\\Nabu.Edit",
       "MultiSelectModel",
       "Document"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.pdf\\shell\\PdfCraft.Edit\\command",
+      "Software\\Classes\\SystemFileAssociations\\.pdf\\shell\\Nabu.Edit\\command",
       "",
       "\"[#PdfcraftExe]\" \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.png\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.png\\shell\\Nabu.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Nabu\u2026"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.png\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.png\\shell\\Nabu.CreatePdf",
       "MultiSelectModel",
       "Single"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.png\\shell\\PdfCraft.CreatePdf\\command",
+      "Software\\Classes\\SystemFileAssociations\\.png\\shell\\Nabu.CreatePdf\\command",
       "",
       "\"[#PdfcraftExe]\" --create-images \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jpg\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.jpg\\shell\\Nabu.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Nabu\u2026"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jpg\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.jpg\\shell\\Nabu.CreatePdf",
       "MultiSelectModel",
       "Single"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jpg\\shell\\PdfCraft.CreatePdf\\command",
+      "Software\\Classes\\SystemFileAssociations\\.jpg\\shell\\Nabu.CreatePdf\\command",
       "",
       "\"[#PdfcraftExe]\" --create-images \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jpeg\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.jpeg\\shell\\Nabu.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Nabu\u2026"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jpeg\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.jpeg\\shell\\Nabu.CreatePdf",
       "MultiSelectModel",
       "Single"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jpeg\\shell\\PdfCraft.CreatePdf\\command",
+      "Software\\Classes\\SystemFileAssociations\\.jpeg\\shell\\Nabu.CreatePdf\\command",
       "",
       "\"[#PdfcraftExe]\" --create-images \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.tif\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.tif\\shell\\Nabu.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Nabu\u2026"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.tif\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.tif\\shell\\Nabu.CreatePdf",
       "MultiSelectModel",
       "Single"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.tif\\shell\\PdfCraft.CreatePdf\\command",
+      "Software\\Classes\\SystemFileAssociations\\.tif\\shell\\Nabu.CreatePdf\\command",
       "",
       "\"[#PdfcraftExe]\" --create-images \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.tiff\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.tiff\\shell\\Nabu.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Nabu\u2026"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.tiff\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.tiff\\shell\\Nabu.CreatePdf",
       "MultiSelectModel",
       "Single"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.tiff\\shell\\PdfCraft.CreatePdf\\command",
+      "Software\\Classes\\SystemFileAssociations\\.tiff\\shell\\Nabu.CreatePdf\\command",
       "",
       "\"[#PdfcraftExe]\" --create-images \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.gif\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.gif\\shell\\Nabu.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Nabu\u2026"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.gif\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.gif\\shell\\Nabu.CreatePdf",
       "MultiSelectModel",
       "Single"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.gif\\shell\\PdfCraft.CreatePdf\\command",
+      "Software\\Classes\\SystemFileAssociations\\.gif\\shell\\Nabu.CreatePdf\\command",
       "",
       "\"[#PdfcraftExe]\" --create-images \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.bmp\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.bmp\\shell\\Nabu.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Nabu\u2026"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.bmp\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.bmp\\shell\\Nabu.CreatePdf",
       "MultiSelectModel",
       "Single"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.bmp\\shell\\PdfCraft.CreatePdf\\command",
+      "Software\\Classes\\SystemFileAssociations\\.bmp\\shell\\Nabu.CreatePdf\\command",
       "",
       "\"[#PdfcraftExe]\" --create-images \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jp2\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.jp2\\shell\\Nabu.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Nabu\u2026"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jp2\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.jp2\\shell\\Nabu.CreatePdf",
       "MultiSelectModel",
       "Single"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jp2\\shell\\PdfCraft.CreatePdf\\command",
+      "Software\\Classes\\SystemFileAssociations\\.jp2\\shell\\Nabu.CreatePdf\\command",
       "",
       "\"[#PdfcraftExe]\" --create-images \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.j2k\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.j2k\\shell\\Nabu.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Nabu\u2026"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.j2k\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.j2k\\shell\\Nabu.CreatePdf",
       "MultiSelectModel",
       "Single"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.j2k\\shell\\PdfCraft.CreatePdf\\command",
+      "Software\\Classes\\SystemFileAssociations\\.j2k\\shell\\Nabu.CreatePdf\\command",
       "",
       "\"[#PdfcraftExe]\" --create-images \"%1\""
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jpx\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.jpx\\shell\\Nabu.CreatePdf",
       "",
-      "Create PDF with PdfCraft\u2026"
+      "Create PDF with Nabu\u2026"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jpx\\shell\\PdfCraft.CreatePdf",
+      "Software\\Classes\\SystemFileAssociations\\.jpx\\shell\\Nabu.CreatePdf",
       "MultiSelectModel",
       "Single"
     ],
     [
       "-1",
-      "Software\\Classes\\SystemFileAssociations\\.jpx\\shell\\PdfCraft.CreatePdf\\command",
+      "Software\\Classes\\SystemFileAssociations\\.jpx\\shell\\Nabu.CreatePdf\\command",
       "",
       "\"[#PdfcraftExe]\" --create-images \"%1\""
     ]

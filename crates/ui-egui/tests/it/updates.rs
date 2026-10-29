@@ -1,4 +1,5 @@
-//! Help ▸ Check for updates (issue #28), with stand-in release sources (no network).
+//! Help ▸ Check for updates. Parchfold has no release feed, so the command explains that and never
+//! asks the updater (which is still bound to the upstream PdfCraft suite).
 
 use std::sync::Arc;
 
@@ -11,7 +12,7 @@ fn release(tag: &str) -> craft_update::Release {
     craft_update::Release {
         tag: tag.to_string(),
         version: craft_update::parse_version(tag),
-        html_url: format!("https://github.com/storytold/pdfcraft/releases/tag/{tag}"),
+        html_url: format!("https://github.com/tomblanchard312/Parchfold/releases/tag/{tag}"),
         ..Default::default()
     }
 }
@@ -31,58 +32,31 @@ fn harness(answer: Result<Option<&str>, &str>) -> Harness<'static, PdfCraftApp> 
     })
 }
 
-/// Run frames until the background check has reported. By what the dialog shows, with the
-/// same 30-second deadline as `support::wait_until`, not for a fixed second: under load the
-/// check's thread can take longer (#1277).
-fn settle(h: &mut Harness<'static, PdfCraftApp>) {
-    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(30);
-    loop {
-        h.run_steps(2);
-        if h.query_by_label_contains("Checking for a newer version").is_none() {
-            break;
-        }
-        assert!(std::time::Instant::now() < deadline, "timed out waiting for the update check");
-        std::thread::sleep(std::time::Duration::from_millis(5));
-    }
-    h.run_steps(2);
-}
-
 #[test]
-fn a_newer_release_is_offered_for_download() {
+fn check_for_updates_explains_that_installation_is_off() {
     let mut h = harness(Ok(Some("v99.0.0")));
+    h.state_mut().community_card_closed = true;
+    h.run_steps(2);
     h.state_mut().execute("help.check_updates");
-    settle(&mut h);
-    h.get_by_label_contains("PdfCraft 99.0.0 is available");
-    h.get_by_label("DOWNLOAD");
-    h.get_by_label("LATER").click();
+    h.run_steps(4);
+    h.get_by_label_contains("Parchfold does not install updates yet.");
+    h.get_by_label_contains("will not download or install a PdfCraft release");
+    assert!(h.query_by_label("DOWNLOAD").is_none());
+    assert!(h.query_by_label_contains("is available").is_none());
+    h.get_by_label("Close").click();
     h.run_steps(3);
-    assert!(h.query_by_label_contains("is available").is_none(), "Later closes the dialog");
+    assert!(h.query_by_label_contains("does not install updates").is_none());
 }
 
 #[test]
-fn an_up_to_date_or_failed_check_says_so() {
-    let mut h = harness(Ok(None));
-    h.state_mut().execute("help.check_updates");
-    settle(&mut h);
-    h.get_by_label_contains("is up to date");
-    assert!(h.query_by_label("Download").is_none());
-
-    let mut h = harness(Err("couldn't reach GitHub"));
-    h.state_mut().execute("help.check_updates");
-    settle(&mut h);
-    h.get_by_label_contains("Couldn't check for updates: couldn't reach GitHub");
-}
-
-#[test]
-fn nothing_is_asked_until_the_user_checks() {
-    // The check at start is opt-in (the desktop app turns it on): the source is only called from the command.
+fn a_release_source_is_never_asked() {
     let calls = Arc::new(std::sync::atomic::AtomicUsize::new(0));
     let counted = calls.clone();
     let mut h = Harness::builder().with_size(egui::vec2(1200.0, 800.0)).build_eframe(move |_cc| {
         let mut app = PdfCraftApp::new();
         app.set_option("language", "en").unwrap();
-        // Settings from a build that had the startup option are ignored.
         app.restore(r#"{"check_updates_at_start": true}"#);
+        app.set_startup_update_check(true);
         let counted = counted.clone();
         app.set_update_source(Arc::new(move || {
             counted.fetch_add(1, std::sync::atomic::Ordering::SeqCst);
@@ -90,31 +64,9 @@ fn nothing_is_asked_until_the_user_checks() {
         }));
         app
     });
-    settle(&mut h);
-    assert_eq!(calls.load(std::sync::atomic::Ordering::SeqCst), 0);
-    assert!(h.query_by_label_contains("is available").is_none());
+    h.run_steps(6);
     h.state_mut().execute("help.check_updates");
-    settle(&mut h);
-    assert_eq!(calls.load(std::sync::atomic::Ordering::SeqCst), 1);
-    h.get_by_label_contains("PdfCraft 99.0.0 is available");
-}
-
-#[test]
-fn the_check_at_start_offers_the_prompt_and_later_dismisses_it() {
-    let mut h = Harness::builder().with_size(egui::vec2(1200.0, 800.0)).build_eframe(|_cc| {
-        let mut app = PdfCraftApp::new();
-        app.set_option("language", "en").unwrap();
-        app.set_update_source(source(Ok(Some("v99.0.0"))));
-        app.set_startup_update_check(true);
-        app
-    });
-    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(30);
-    while h.query_by_label_contains("is available").is_none() {
-        h.run_steps(2);
-        assert!(std::time::Instant::now() < deadline, "timed out waiting for the startup prompt");
-        std::thread::sleep(std::time::Duration::from_millis(5));
-    }
-    h.get_by_label("LATER").click();
-    h.run_steps(3);
-    assert!(h.query_by_label_contains("is available").is_none(), "Later closes the prompt");
+    h.run_steps(6);
+    assert_eq!(calls.load(std::sync::atomic::Ordering::SeqCst), 0);
+    h.get_by_label_contains("Parchfold does not install updates yet.");
 }

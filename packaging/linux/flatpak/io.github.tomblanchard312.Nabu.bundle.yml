@@ -9,13 +9,13 @@
 # at runtime; the freedesktop runtime has all of them, and the GPU driver comes from its
 # org.freedesktop.Platform.GL extension.
 #
-# ai.storyteller.pdfcraft.yml (same directory) is the from-source manifest for Flathub. Keep
+# io.github.tomblanchard312.Nabu.yml (same directory) is the from-source manifest for Flathub. Keep
 # runtime-version and finish-args identical in both (packaging-lint checks this).
-id: ai.storyteller.pdfcraft
+id: io.github.tomblanchard312.Nabu
 runtime: org.freedesktop.Platform
 runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
-command: pdfcraft
+command: nabu
 finish-args:
   # Display: Wayland first; X11 only when no Wayland compositor is running.
   - --socket=wayland
@@ -37,19 +37,19 @@ finish-args:
   # runs the `lp` command (crates/print), which the freedesktop runtime doesn't ship, so Print
   # reports that the spooler is unavailable until it goes through the print portal.
 modules:
-  - name: pdfcraft
+  - name: nabu
     buildsystem: simple
     build-commands:
-      - install -Dm755 bin/pdfcraft /app/bin/pdfcraft
-      - install -Dm755 bin/pdfcraft-cli /app/bin/pdfcraft-cli
-      - install -Dm644 share/applications/ai.storyteller.pdfcraft.desktop /app/share/applications/ai.storyteller.pdfcraft.desktop
-      - install -Dm644 share/mime/packages/ai.storyteller.pdfcraft.xml /app/share/mime/packages/ai.storyteller.pdfcraft.xml
+      - install -Dm755 bin/nabu /app/bin/nabu
+      - install -Dm755 bin/nabu-cli /app/bin/nabu-cli
+      - install -Dm644 share/applications/io.github.tomblanchard312.Nabu.desktop /app/share/applications/io.github.tomblanchard312.Nabu.desktop
+      - install -Dm644 share/mime/packages/io.github.tomblanchard312.Nabu.xml /app/share/mime/packages/io.github.tomblanchard312.Nabu.xml
       # Already has the release's version and date substituted by package.sh.
-      - install -Dm644 share/metainfo/ai.storyteller.pdfcraft.metainfo.xml /app/share/metainfo/ai.storyteller.pdfcraft.metainfo.xml
-      # OCR models (with their licences), found at /app/bin/../share/pdfcraft/models.
-      - mkdir -p /app/share/pdfcraft && cp -R share/pdfcraft/models /app/share/pdfcraft/
+      - install -Dm644 share/metainfo/io.github.tomblanchard312.Nabu.metainfo.xml /app/share/metainfo/io.github.tomblanchard312.Nabu.metainfo.xml
+      # OCR models (with their licences), found at /app/bin/../share/nabu/models.
+      - mkdir -p /app/share/nabu && cp -R share/nabu/models /app/share/nabu/
       # Licences, including the embedded craft-fonts' OFL texts.
-      - mkdir -p /app/share/icons /app/share/doc && cp -R share/icons/hicolor /app/share/icons/ && cp -R share/doc/pdfcraft /app/share/doc/
+      - mkdir -p /app/share/icons /app/share/doc && cp -R share/icons/hicolor /app/share/icons/ && cp -R share/doc/nabu /app/share/doc/
     sources:
       - type: dir
         path: stage

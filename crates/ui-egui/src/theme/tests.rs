@@ -298,3 +298,10 @@ fn text_is_readable_on_every_surface() {
         }
     }
 }
+
+#[test]
+fn menu_overflow_has_a_bundled_proportional_glyph() {
+    let mut fonts = Fonts::new(TextOptions::default(), font_definitions());
+    let drawn = galley(&mut fonts, FontFamily::Proportional, 14.0, 1.0, "⋯");
+    assert!(drawn.size().x > 0.0);
+}

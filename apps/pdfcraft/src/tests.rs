@@ -658,7 +658,7 @@ fn the_control_file_replaces_the_one_a_previous_run_left() {
 /// so it has to be the class the window carries: the app id, on Wayland and X11 alike.
 #[test]
 fn the_desktop_entry_names_the_window_class() {
-    let entry = include_str!("../../../packaging/linux/ai.storyteller.pdfcraft.desktop");
+    let entry = include_str!("../../../packaging/linux/io.github.tomblanchard312.Nabu.desktop");
     let class = entry.lines().find_map(|line| line.strip_prefix("StartupWMClass="));
     assert_eq!(class, Some(super::APP_ID));
 }

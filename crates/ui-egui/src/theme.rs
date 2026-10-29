@@ -367,6 +367,8 @@ fn font_definitions_for_platform(prefer_hans: bool, platform: FontPolicyPlatform
     add(&mut fonts, "Inter-SemiBold", include_bytes!("../../../assets/fonts/Inter-SemiBold.ttf"));
     add(&mut fonts, "JetBrainsMono", include_bytes!("../../../assets/fonts/JetBrainsMono-Regular.ttf"));
     fonts.families.entry(FontFamily::Proportional).or_default().insert(0, "Inter".to_owned());
+    // The menu overflow symbol is absent from Inter and egui's default proportional faces.
+    fonts.families.entry(FontFamily::Proportional).or_default().push("JetBrainsMono".to_owned());
     fonts.families.entry(FontFamily::Monospace).or_default().insert(0, "JetBrainsMono".to_owned());
     // Keep missing Latin/Cyrillic letters in the app's own faces (for example Bulgarian ѝ,
     // absent from JetBrains Mono), before egui's defaults or optional system/CJK fallbacks.

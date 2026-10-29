@@ -3,7 +3,7 @@
 use std::io::{Read, pipe};
 use std::process::{Command, Output, Stdio};
 
-const BIN: &str = env!("CARGO_BIN_EXE_pdfcraft-cli");
+const BIN: &str = env!("CARGO_BIN_EXE_nabu-cli");
 
 fn closed_stdout(args: &[&str]) -> Output {
     let (reader, writer) = pipe().unwrap();
@@ -13,7 +13,7 @@ fn closed_stdout(args: &[&str]) -> Output {
 
 #[test]
 fn output_commands_exit_cleanly_when_the_reader_has_closed() {
-    let base = std::env::temp_dir().join(format!("pdfcraft-cli-stdout-{}", std::process::id()));
+    let base = std::env::temp_dir().join(format!("nabu-cli-stdout-{}", std::process::id()));
     std::fs::create_dir_all(&base).unwrap();
     let pdf = base.join("text.pdf");
     let bytes = pdfcraft_engine::Session::new().create_from_text("Pipe test", "Hello from PdfCraft").unwrap();
