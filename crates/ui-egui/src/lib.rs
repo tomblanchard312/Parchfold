@@ -232,6 +232,8 @@ struct PendingOpen {
 }
 
 pub struct PdfCraftApp {
+    #[cfg(not(target_arch = "wasm32"))]
+    pub(crate) speech: enki_speech_ui::SpeechTools,
     /// Tools side and pane widths; which panes are open is `left_open` and `right`.
     pub side_panels: side_panels::SidePanels,
     pub session: Session,
@@ -631,3 +633,6 @@ pub struct PdfCraftApp {
     /// An absolute GoToR target waiting for approval, before any target-file I/O (#1364).
     pub pending_remote_link: Option<PendingRemoteLink>,
 }
+
+#[cfg(not(target_arch = "wasm32"))]
+mod speech;

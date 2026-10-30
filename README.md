@@ -574,3 +574,5 @@ this license. They have been removed from this fork. The terms are in
 </p>
 
 The Tools panel sits on the left, or on the right with Preferences ▸ Tools panel side. The rail stays at the right edge and opens one side panel beside it. Drag a panel's inner edge to resize it; widths are remembered. F4 shows or hides the side panel and Shift+F4 the Tools panel (also in the View menu); View ▸ Reset side panels restores the default arrangement.
+
+Voice accessibility preview: see [dictation, transcription, translation and safe voice controls](docs/VOICE.md).
