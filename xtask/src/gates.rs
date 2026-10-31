@@ -110,6 +110,14 @@ pub fn ci(_: &[String]) -> anyhow::Result<()> {
     type Step = (&'static str, Box<dyn Fn() -> anyhow::Result<()>>);
     let steps: Vec<Step> = vec![
         ("fmt", Box::new(|| run_args(&["fmt", "--all", "--", "--check"]))),
+        (
+            "enki-packaging",
+            Box::new(|| {
+                let mut c = Command::new(if cfg!(windows) { "python" } else { "python3" });
+                c.current_dir(root()).arg("packaging/test_enki_runtime.py");
+                run(c, "Enki binary packaging regression checks")
+            }),
+        ),
         ("clippy", Box::new(|| run_args(&["clippy", "--workspace", "--all-targets", "--", "-D", "warnings"]))),
         ("cli-no-default-features", Box::new(|| run_args(&["check", "-p", "nabu-cli", "--no-default-features"]))),
         ("test", Box::new(|| test(&[]))),

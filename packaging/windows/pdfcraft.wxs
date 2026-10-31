@@ -77,6 +77,7 @@
 
     <Feature Id="Main" Title="Parchfold" Level="1">
       <?if $(var.HasCraftFontLicences) = 1 ?>
+      <ComponentGroupRef Id="EnkiRuntimeFiles" />
       <ComponentGroupRef Id="CraftFontLicences" />
       <?endif?>
       <ComponentGroupRef Id="PdfcraftFiles" />
@@ -89,6 +90,11 @@
     </Property><SetProperty Id="EXISTINGIMAGECONTEXTMENU" Action="CraftLoadOption2U" Value="[CRAFT_OPTION_2_U]" After="CraftLoadOption2M" Sequence="both" Condition="ALLUSERS &lt;&gt; 1" /></Package>
 
   <Fragment>
+    <DirectoryRef Id="INSTALLFOLDER"><Directory Id="EnkiRuntimeDirectory" Name="enki" /></DirectoryRef>
+    <ComponentGroup Id="EnkiRuntimeFiles" Directory="EnkiRuntimeDirectory">
+      <Files Include="$(var.BinDir)\enki\**" />
+    </ComponentGroup>
+
     <?if $(var.HasCraftFontLicences) = 1 ?>
     <ComponentGroup Id="CraftFontLicences" Directory="INSTALLFOLDER">
       <Files Include="$(var.DocsDir)\**" />

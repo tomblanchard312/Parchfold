@@ -70,6 +70,7 @@ sed -e "s/@VERSION@/$VERSION/g" -e "s/@DATE@/$PDFCRAFT_BUILD_DATE/g" \
   "$LINUX/$APP_ID.metainfo.xml.in" >"$STAGE/share/metainfo/$APP_ID.metainfo.xml"
 cp -R "$ROOT/assets/app-icon/hicolor" "$STAGE/share/icons/"
 copy_docs "$STAGE/share/doc/nabu"
+python3 "$ROOT/packaging/stage-enki.py" --target "${CARGO_BUILD_TARGET:-$(rustc -vV | sed -n 's/^host: //p')}" --out "$STAGE/lib/parchfold/enki"
 # OCR models: the app finds them at <bin>/../share/nabu/models. They come from cargo xtask,
 # which has to run here: build it for this machine, not for CARGO_BUILD_TARGET.
 (unset CARGO_BUILD_TARGET; stage_models "$STAGE/share/nabu/models")

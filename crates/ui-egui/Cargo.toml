@@ -108,4 +108,4 @@ xattr = "1.6"
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies.enki-speech-ui]
 version = "=0.2.0"
 git = "https://github.com/tomblanchard312/Qanloom.git"
-rev = "719d09989e86593ed84c6129d829df6a2e8ab1d0"
+rev = "d26daada860f8ed9d006d95c7b503515128974c3"

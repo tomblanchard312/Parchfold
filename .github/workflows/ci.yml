@@ -60,7 +60,7 @@ jobs:
           import sys, tomllib
           lock = tomllib.load(open("Cargo.lock", "rb"))
           # Only the reviewed Enki SDK snapshot may come from the product fork.
-          enki_source = "git+https://github.com/tomblanchard312/Qanloom.git?rev=719d09989e86593ed84c6129d829df6a2e8ab1d0#719d09989e86593ed84c6129d829df6a2e8ab1d0"
+          enki_source = "git+https://github.com/tomblanchard312/Qanloom.git?rev=d26daada860f8ed9d006d95c7b503515128974c3#d26daada860f8ed9d006d95c7b503515128974c3"
           def enki_sdk(p):
               return (p.get("name") in {"enki-speech-ui", "sharedai-client", "sharedai-protocol"}
                       and p.get("version") == "0.2.0" and p.get("source") == enki_source)

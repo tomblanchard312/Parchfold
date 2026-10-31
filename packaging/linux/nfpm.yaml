@@ -34,6 +34,8 @@ overrides:
       - libc6 (>= 2.35)
       - libgcc-s1
       - libasound2 | libasound2t64
+      - libgomp1
+      - libstdc++6
       - libxkbcommon0
       - libvulkan1 | libegl1
     recommends:
@@ -69,6 +71,9 @@ overrides:
       - xdg-desktop-portal
 
 contents:
+  - src: ${STAGE}/usr/lib/parchfold/enki/
+    dst: /usr/lib/parchfold/enki/
+    type: tree
   - src: ${STAGE}/usr/bin/nabu
     dst: /usr/bin/nabu
     file_info: { mode: 0755 }

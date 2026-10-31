@@ -52,6 +52,7 @@ modules:
       - mkdir -p /app/share/nabu && cp -R share/nabu/models /app/share/nabu/
       # Licences, including the embedded craft-fonts' OFL texts.
       - mkdir -p /app/share/icons /app/share/doc && cp -R share/icons/hicolor /app/share/icons/ && cp -R share/doc/nabu /app/share/doc/
+      - mkdir -p /app/lib/parchfold && cp -R lib/parchfold/enki /app/lib/parchfold/enki
     sources:
       - type: dir
         path: stage

@@ -120,6 +120,7 @@ cp "$WORK/bin/nabu" "$APP/Contents/MacOS/Nabu"
 cp "$ROOT/assets/app-icon/pdfcraft.icns" "$APP/Contents/Resources/Nabu.icns"
 # Required embedded-font notices are independent of optional font inputs.
 cp "$ROOT/NOTICE" "$APP/Contents/Resources/NOTICE"
+python3 "$ROOT/packaging/stage-enki.py" --target "$ARCH-apple-darwin" --out "$APP/Contents/MacOS/enki"
 # The standard About panel (PdfCraft menu > About PdfCraft) shows Credits.rtf under the version:
 # the website and Discord links the in-app About dialog has (#1287).
 cp "$HERE/Credits.rtf" "$APP/Contents/Resources/Credits.rtf"
@@ -135,6 +136,10 @@ printf 'APPL????' >"$APP/Contents/PkgInfo"
 
 # Sign inside-out: nested code first, then the bundle itself (no --deep on the final signature).
 # Today the only nested code is the main executable; frameworks/helpers would be signed here too.
+for runtime in "$APP/Contents/MacOS/enki/"*; do
+  case "$runtime" in *.txt|*.json) continue ;; esac
+  sign --options runtime "$runtime"
+done
 sign --options runtime --entitlements "$HERE/entitlements.plist" "$APP/Contents/MacOS/Nabu"
 sign --options runtime --entitlements "$HERE/entitlements.plist" "$APP"
 codesign --verify --strict --deep --verbose=2 "$APP"

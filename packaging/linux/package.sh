@@ -80,6 +80,8 @@ copy_docs "$STAGE/usr/share/doc/nabu"
 # OCR models: the app finds them at <bin>/../share/nabu/models, so in every format below.
 stage_models "$STAGE/usr/share/nabu/models"
 
+python3 "$ROOT/packaging/stage-enki.py" --target "${CROSS_TARGET:-$ARCH-unknown-linux-gnu}" --out "$STAGE/usr/lib/parchfold/enki"
+
 if command -v desktop-file-validate >/dev/null; then
   desktop-file-validate "$STAGE/usr/share/applications/$APP_ID.desktop"
 fi
