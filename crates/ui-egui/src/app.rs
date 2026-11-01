@@ -34,6 +34,8 @@ impl PdfCraftApp {
     /// Construct an application with the default session, panels, theme and control state.
     pub fn new() -> Self {
         Self {
+            #[cfg(not(target_arch = "wasm32"))]
+            speech: enki_speech_ui::SpeechTools::new("parchfold"),
             session: Session::new(),
             views: Vec::new(),
             closed_tabs: Vec::new(),
@@ -574,6 +576,8 @@ impl eframe::App for PdfCraftApp {
             // Notices too: a refused field value or a failed save must be seen in full screen.
             self.show_progress(&ctx);
             widgets::toast(self, &ctx);
+            #[cfg(not(target_arch = "wasm32"))]
+            crate::speech::show(self, &ctx);
             self.finish_render_frame(&ctx);
             if let Some(mut control) = self.control.take() {
                 control.finish_frame(&ctx, self);
@@ -612,6 +616,8 @@ impl eframe::App for PdfCraftApp {
         dialogs::show(self, &ctx);
         self.show_progress(&ctx);
         widgets::toast(self, &ctx);
+        #[cfg(not(target_arch = "wasm32"))]
+        crate::speech::show(self, &ctx);
         self.finish_render_frame(&ctx);
         // Screenshots are issued only after a settled pass that really drew the window.
         if let Some(mut control) = self.control.take() {

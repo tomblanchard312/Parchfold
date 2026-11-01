@@ -550,3 +550,13 @@ fn tool_file_reads_refuse_inputs_exceeding_512_mib() {
     }
     let _ = std::fs::remove_dir_all(&dir);
 }
+
+#[test]
+fn reviewed_speech_comment_is_headless_and_undoable() {
+    let mut a = Automation::new();
+    let id = search_document(&mut a, 1);
+    json(&mut a, "comment_add", json!({"doc":id.0,"page":1,"type":"note","at":[72,72],"contents":"Reviewed spoken text"}));
+    assert_eq!(json(&mut a, "comment_list", json!({"doc":id.0}))["count"], 1);
+    json(&mut a, "edit_undo", json!({"doc":id.0}));
+    assert_eq!(json(&mut a, "comment_list", json!({"doc":id.0}))["count"], 0);
+}

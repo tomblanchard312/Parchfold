@@ -19,6 +19,8 @@ allow = [
     "Unicode-3.0",
     "BSL-1.0",
     "CC0-1.0",
+    # TLS root-certificate data; the full license is included in NOTICE.
+    "CDLA-Permissive-2.0",
 ]
 
 [licenses.private]
@@ -35,6 +37,8 @@ unknown-git = "deny"
 # Shared UI components and spooler; Cargo.toml pins the immutable revision. craft-print pins
 # storytold's winprint fork (Windows printing, #1107) to an immutable revision of its own.
 allow-git = [
+    # SDK revision and package allowlist are enforced in .github/workflows/ci.yml.
+    "https://github.com/tomblanchard312/Qanloom.git",
     "https://github.com/storytold/craft-libs",
     "https://github.com/storytold/winprint.rs",
     # The reviewed egui 0.37 and winit 0.30.13 fork revisions (immutable pins in Cargo.toml).

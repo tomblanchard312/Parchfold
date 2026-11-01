@@ -24,7 +24,7 @@ jobs:
   # The shared gate doesn't check where git dependencies come from; release.yml runs the same job.
   git-sources:
     if: github.event.action != 'labeled' || github.event.label.name == 'full-ci'
-    name: Git dependencies come from storytold
+    name: Git dependencies use approved sources
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,7 +35,7 @@ jobs:
       - name: Windows font notice regressions
         shell: pwsh
         run: ./packaging/windows/test-font-notices.ps1
-      - name: Git dependencies come from storytold
+      - name: Git dependencies use approved sources
         run: |
           set -euo pipefail
           test -f Cargo.lock || { echo "Cargo.lock is missing"; exit 1; }
@@ -59,11 +59,19 @@ jobs:
           python3 - <<'PY'
           import sys, tomllib
           lock = tomllib.load(open("Cargo.lock", "rb"))
+          # Only the reviewed Enki SDK snapshot may come from the product fork.
+          enki_source = "git+https://github.com/tomblanchard312/Qanloom.git?rev=719d09989e86593ed84c6129d829df6a2e8ab1d0#719d09989e86593ed84c6129d829df6a2e8ab1d0"
+          def enki_sdk(p):
+              return (p.get("name") in {"enki-speech-ui", "sharedai-client", "sharedai-protocol"}
+                      and p.get("version") == "0.2.0" and p.get("source") == enki_source)
+          assert enki_sdk({"name": "enki-speech-ui", "version": "0.2.0", "source": enki_source})
+          assert not enki_sdk({"name": "other", "version": "0.2.0", "source": enki_source})
+          assert not enki_sdk({"name": "enki-speech-ui", "version": "0.2.0", "source": enki_source + "x"})
           bad = sorted({p["source"] for p in lock.get("package", [])
                         if p.get("source", "").startswith("git+")
-                        and not p["source"].startswith("git+https://github.com/storytold/")})
+                        and not p["source"].startswith("git+https://github.com/storytold/") and not enki_sdk(p)})
           if bad:
-              print("Git dependencies outside github.com/storytold:", *bad, sep="\n")
+              print("Git dependencies outside approved sources:", *bad, sep="\n")
               sys.exit(1)
           PY
 
@@ -79,7 +87,7 @@ jobs:
       craft-fonts-ref: b076417b5880bd4154bd22f00695b1d28c6bea83
       # egui/winit/rfd, and the independent oracles (crates/oracle).
       packages: >-
-        libxkbcommon-dev libwayland-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev
+        libasound2-dev libxkbcommon-dev libwayland-dev libx11-dev libxrandr-dev libxi-dev libgl1-mesa-dev
         libgtk-3-dev qpdf poppler-utils
       # cargo-deny for the deny step of `cargo xtask ci`, which requires it under CI.
       tools: cargo-nextest@0.9.150,cargo-deny@0.20.2

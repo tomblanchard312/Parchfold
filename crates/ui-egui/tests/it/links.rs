@@ -109,3 +109,17 @@ fn about_dialog_has_contributors_and_models_tabs() {
     h.run_steps(4);
     assert!(h.query_all_by_label("Anthropic").count() >= 1);
 }
+
+#[cfg(not(target_arch = "wasm32"))]
+#[test]
+fn voice_controls_open_and_reopen_without_recording() {
+    let mut h = harness(|_| {});
+    for _ in 0..2 {
+        h.get_by_label("Voice").click();
+        h.run_steps(2);
+        h.get_by_label("Dictate");
+        h.get_by_label("Voice command");
+        h.get_by_label("Voice").click();
+        h.run_steps(2);
+    }
+}
