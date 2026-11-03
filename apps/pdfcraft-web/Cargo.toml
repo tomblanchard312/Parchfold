@@ -1,5 +1,5 @@
 [package]
-name = "nabu-web"
+name = "parchfold-web"
 description = "Parchfold in the browser (wasm32; build with `trunk build --release` in this directory)"
 version.workspace = true
 edition.workspace = true

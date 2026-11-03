@@ -80,10 +80,10 @@ impl Models {
     /// executable (packaging/*):
     /// - `models/` beside it: the Windows MSI and portable zip;
     /// - `../Resources/models`: the macOS app bundle (`Contents/MacOS` → `Contents/Resources`);
-    /// - `../share/nabu/models`: the FHS-style trees (`bin/` → `share/`) of the Linux
+    /// - `../share/parchfold/models`: the FHS-style trees (`bin/` → `share/`) of the Linux
     ///   deb/rpm/tar.gz/AppImage/Flatpak and the FreeBSD tarball, wherever they are installed.
     pub fn dirs_beside_exe(exe_dir: &Path) -> Vec<PathBuf> {
-        vec![exe_dir.join("models"), exe_dir.join("../Resources/models"), exe_dir.join("../share/nabu/models")]
+        vec![exe_dir.join("models"), exe_dir.join("../Resources/models"), exe_dir.join("../share/parchfold/models")]
     }
 }
 
@@ -389,11 +389,11 @@ mod tests {
         let layouts = [
             ("windows", "PdfCraft", "PdfCraft/models"),
             ("macos", "PdfCraft.app/Contents/MacOS", "PdfCraft.app/Contents/Resources/models"),
-            ("linux-deb-rpm", "usr/bin", "usr/share/nabu/models"),
-            ("linux-tar", "nabu-1.0.0-linux-x86_64/bin", "nabu-1.0.0-linux-x86_64/share/nabu/models"),
-            ("appimage", "Parchfold.AppDir/usr/bin", "Parchfold.AppDir/usr/share/nabu/models"),
-            ("flatpak", "app/bin", "app/share/nabu/models"),
-            ("freebsd", "usr/local/bin", "usr/local/share/nabu/models"),
+            ("linux-deb-rpm", "usr/bin", "usr/share/parchfold/models"),
+            ("linux-tar", "parchfold-1.0.0-linux-x86_64/bin", "parchfold-1.0.0-linux-x86_64/share/parchfold/models"),
+            ("appimage", "Parchfold.AppDir/usr/bin", "Parchfold.AppDir/usr/share/parchfold/models"),
+            ("flatpak", "app/bin", "app/share/parchfold/models"),
+            ("freebsd", "usr/local/bin", "usr/local/share/parchfold/models"),
         ];
         for (name, exe_dir, models_dir) in layouts {
             let root = base.join(name);

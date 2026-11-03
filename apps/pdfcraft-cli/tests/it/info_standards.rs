@@ -4,7 +4,7 @@
 
 use std::process::Command;
 
-const BIN: &str = env!("CARGO_BIN_EXE_nabu-cli");
+const BIN: &str = env!("CARGO_BIN_EXE_parchfold-cli");
 
 /// A one-page PDF, with `metadata` as the catalog's XMP stream when given.
 fn fixture(metadata: Option<&str>) -> Vec<u8> {

@@ -29,7 +29,7 @@ jobs:
   windows-arm64:
     uses: storytold/craft-common-actions/.github/workflows/windows-arm64.yml@8bb4e5ab95443171104ad88113fe1ef9b0e5ce3f
     with:
-      app-name: nabu
+      app-name: parchfold
       app-dir: PdfCraft
       install-relative-path: Programs/ArtCraft/PdfCraft
       install-scope: perUser

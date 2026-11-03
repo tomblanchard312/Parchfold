@@ -12,7 +12,7 @@ fn main() {
     wasm_bindgen_futures::spawn_local(async move {
         let Some(canvas) = web_sys::window()
             .and_then(|w| w.document())
-            .and_then(|d| d.get_element_by_id("nabu"))
+            .and_then(|d| d.get_element_by_id("parchfold"))
             .and_then(|e| e.dyn_into::<web_sys::HtmlCanvasElement>().ok())
         else {
             return;
@@ -24,9 +24,12 @@ fn main() {
                 Box::new(|cc| {
                     let mut app = PdfCraftApp::new();
                     // "printcraft": settings saved under the app's former name, PrintCraft.
-                    if let Some(json) =
-                        cc.storage.and_then(|s| s.get_string("nabu").or_else(|| s.get_string("pdfcraft")).or_else(|| s.get_string("printcraft")))
-                    {
+                    if let Some(json) = cc.storage.and_then(|s| {
+                        s.get_string("parchfold")
+                            .or_else(|| s.get_string("nabu"))
+                            .or_else(|| s.get_string("pdfcraft"))
+                            .or_else(|| s.get_string("printcraft"))
+                    }) {
                         app.restore(&json);
                     }
                     // `?file=<url>` opens a PDF from a URL (same-origin or CORS-enabled).
@@ -128,13 +131,13 @@ async fn fetch_bytes(url: &str) -> Result<Vec<u8>, String> {
 /// The `postMessage` bridge to a same-origin parent page. Messages are plain objects with a
 /// `type`:
 ///
-/// - `nabu:ready` (to the parent): the app is listening; send files now.
-/// - `nabu:open` (from the parent): `{ name, bytes }`, where `bytes` is an `ArrayBuffer` or
+/// - `parchfold:ready` (to the parent): the app is listening; send files now.
+/// - `parchfold:open` (from the parent): `{ name, bytes }`, where `bytes` is an `ArrayBuffer` or
 ///   `Uint8Array` holding a PDF. It opens in a tab, like a `?file=` URL.
-/// - `nabu:save` (to the parent): `{ name, saveAs, bytes }` when the user saves; `bytes` is
+/// - `parchfold:save` (to the parent): `{ name, saveAs, bytes }` when the user saves; `bytes` is
 ///   a transferred `ArrayBuffer`. The parent stores the file (and reports its own errors).
-/// - `nabu:dirty` (to the parent): `{ dirty }` whenever unsaved work appears or goes away.
-/// - `nabu:failed` (to the parent): `{ error }` when the app couldn't start.
+/// - `parchfold:dirty` (to the parent): `{ dirty }` whenever unsaved work appears or goes away.
+/// - `parchfold:failed` (to the parent): `{ error }` when the app couldn't start.
 ///
 /// Only the parent window on the app's own origin is heard or answered. With a parent on
 /// another origin there is no bridge: the app runs as if unframed and saves download.
@@ -176,19 +179,19 @@ mod host {
         }
 
         pub fn post_ready(&self) {
-            if let Some(m) = message(&[("type", "nabu:ready".into()), ("version", env!("CARGO_PKG_VERSION").into())]) {
+            if let Some(m) = message(&[("type", "parchfold:ready".into()), ("version", env!("CARGO_PKG_VERSION").into())]) {
                 let _ = self.post(&m, None);
             }
         }
 
         /// The app couldn't start (no WebGL, for example): let the parent say so.
         pub fn post_failed(&self, error: &str) {
-            if let Some(m) = message(&[("type", "nabu:failed".into()), ("error", error.into())]) {
+            if let Some(m) = message(&[("type", "parchfold:failed".into()), ("error", error.into())]) {
                 let _ = self.post(&m, None);
             }
         }
 
-        /// Hear `nabu:open` from the parent and queue the file like a `?file=` download.
+        /// Hear `parchfold:open` from the parent and queue the file like a `?file=` download.
         pub fn listen(&self, inbox: pdfcraft_ui_egui::Inbox, ctx: egui::Context) {
             let parent = self.parent.clone();
             let origin = self.origin.clone();
@@ -197,7 +200,7 @@ mod host {
                     return;
                 }
                 let data = event.data();
-                if string(&data, "type").as_deref() != Some("nabu:open") {
+                if string(&data, "type").as_deref() != Some("parchfold:open") {
                     return;
                 }
                 let name = string(&data, "name").filter(|n| !n.trim().is_empty()).unwrap_or_else(|| "document.pdf".to_string());
@@ -224,8 +227,13 @@ mod host {
             let bridge = self.clone();
             Box::new(move |name: &str, bytes: &[u8], save_as: bool| {
                 let buffer = js_sys::Uint8Array::from(bytes).buffer();
-                let m = message(&[("type", "nabu:save".into()), ("name", name.into()), ("saveAs", save_as.into()), ("bytes", buffer.clone().into())])
-                    .ok_or_else(|| "couldn't build the message".to_string())?;
+                let m = message(&[
+                    ("type", "parchfold:save".into()),
+                    ("name", name.into()),
+                    ("saveAs", save_as.into()),
+                    ("bytes", buffer.clone().into()),
+                ])
+                .ok_or_else(|| "couldn't build the message".to_string())?;
                 bridge.post(&m, Some(&buffer))
             })
         }
@@ -236,7 +244,7 @@ mod host {
             Box::new(move |dirty: bool| {
                 if dirty != last {
                     last = dirty;
-                    if let Some(m) = message(&[("type", "nabu:dirty".into()), ("dirty", dirty.into())]) {
+                    if let Some(m) = message(&[("type", "parchfold:dirty".into()), ("dirty", dirty.into())]) {
                         let _ = bridge.post(&m, None);
                     }
                 }
@@ -259,5 +267,5 @@ mod host {
 
 #[cfg(not(target_arch = "wasm32"))]
 fn main() {
-    eprintln!("nabu-web targets wasm32: run `trunk serve` or `trunk build --release` in apps/pdfcraft-web");
+    eprintln!("parchfold-web targets wasm32: run `trunk serve` or `trunk build --release` in apps/pdfcraft-web");
 }

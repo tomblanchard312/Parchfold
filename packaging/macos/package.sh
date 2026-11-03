@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 # Build, sign and (optionally) notarize the macOS release artifacts:
 #
-#   $DIST/nabu-<version>-macos-<arch>.dmg          Parchfold.app on a drag-to-Applications DMG
-#   $DIST/nabu-cli-<version>-macos-<arch>.zip      the headless CLI
+#   $DIST/parchfold-<version>-macos-<arch>.dmg          Parchfold.app on a drag-to-Applications DMG
+#   $DIST/parchfold-cli-<version>-macos-<arch>.zip      the headless CLI
 #
 # Usage: packaging/macos/package.sh [--arch universal|aarch64|x86_64] [--skip-build]
 #
@@ -39,9 +39,9 @@ export MACOSX_DEPLOYMENT_TARGET=11.0
 IDENTITY="${MACOS_SIGN_IDENTITY:--}"
 SHORT_VERSION="${VERSION%%-*}"
 WORK="$CARGO_TARGET_DIR/macos-package"
-APP="$WORK/Nabu.app"
-DMG="$DIST/nabu-$VERSION-macos-$ARCH.dmg"
-CLI_ZIP="$DIST/nabu-cli-$VERSION-macos-$ARCH.zip"
+APP="$WORK/Parchfold.app"
+DMG="$DIST/parchfold-$VERSION-macos-$ARCH.dmg"
+CLI_ZIP="$DIST/parchfold-cli-$VERSION-macos-$ARCH.zip"
 
 NOTARIZE=0
 if [[ "$IDENTITY" = "-" ]]; then
@@ -58,12 +58,12 @@ echo "==> Parchfold $VERSION for macOS ($ARCH), identity: $IDENTITY, notarize: $
 if [[ "$SKIP_BUILD" = 0 ]]; then
   args=()
   for t in "${TARGETS[@]}"; do args+=(--target "$t"); done
-  (cd "$ROOT" && cargo build --release --locked -p nabu -p nabu-cli "${args[@]}")
+  (cd "$ROOT" && cargo build --release --locked -p parchfold -p parchfold-cli "${args[@]}")
 fi
 
 rm -rf "$WORK"
 mkdir -p "$WORK/bin"
-for bin in nabu nabu-cli; do
+for bin in parchfold parchfold-cli; do
   inputs=()
   for t in "${TARGETS[@]}"; do inputs+=("$CARGO_TARGET_DIR/$t/release/$bin"); done
   lipo -create -output "$WORK/bin/$bin" "${inputs[@]}"
@@ -116,8 +116,8 @@ notarize() {
 echo "==> assembling $APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 # Executable and icon carry the display name (CFBundleExecutable / CFBundleIconFile).
-cp "$WORK/bin/nabu" "$APP/Contents/MacOS/Nabu"
-cp "$ROOT/assets/app-icon/pdfcraft.icns" "$APP/Contents/Resources/Nabu.icns"
+cp "$WORK/bin/parchfold" "$APP/Contents/MacOS/Parchfold"
+cp "$ROOT/assets/app-icon/pdfcraft.icns" "$APP/Contents/Resources/Parchfold.icns"
 # Required embedded-font notices are independent of optional font inputs.
 cp "$ROOT/NOTICE" "$APP/Contents/Resources/NOTICE"
 # The standard About panel (PdfCraft menu > About PdfCraft) shows Credits.rtf under the version:
@@ -135,7 +135,7 @@ printf 'APPL????' >"$APP/Contents/PkgInfo"
 
 # Sign inside-out: nested code first, then the bundle itself (no --deep on the final signature).
 # Today the only nested code is the main executable; frameworks/helpers would be signed here too.
-sign --options runtime --entitlements "$HERE/entitlements.plist" "$APP/Contents/MacOS/Nabu"
+sign --options runtime --entitlements "$HERE/entitlements.plist" "$APP/Contents/MacOS/Parchfold"
 sign --options runtime --entitlements "$HERE/entitlements.plist" "$APP"
 codesign --verify --strict --deep --verbose=2 "$APP"
 
@@ -151,7 +151,7 @@ fi
 echo "==> building $DMG"
 STAGE="$WORK/dmg"
 mkdir -p "$STAGE"
-ditto "$APP" "$STAGE/Nabu.app"
+ditto "$APP" "$STAGE/Parchfold.app"
 ln -s /Applications "$STAGE/Applications"
 # Finder window layout: background, icon size and positions (packaging/macos/dmg/README.md).
 mkdir -p "$STAGE/.background"
@@ -186,7 +186,7 @@ MOUNT="$WORK/dmg-check"
 rm -rf "$MOUNT"
 mkdir -p "$MOUNT"
 hdiutil_retry attach attach -nobrowse -readonly -mountpoint "$MOUNT" "$DMG" >/dev/null
-if ! codesign --verify --strict --deep --verbose=2 "$MOUNT/Nabu.app"; then
+if ! codesign --verify --strict --deep --verbose=2 "$MOUNT/Parchfold.app"; then
   hdiutil_retry detach detach "$MOUNT" >/dev/null || true
   exit 1
 fi
@@ -200,17 +200,17 @@ fi
 
 # ---- CLI ---------------------------------------------------------------------------------------
 echo "==> building $CLI_ZIP"
-CLI_DIR="$WORK/nabu-cli-$VERSION-macos-$ARCH"
+CLI_DIR="$WORK/parchfold-cli-$VERSION-macos-$ARCH"
 mkdir -p "$CLI_DIR"
-cp "$WORK/bin/nabu-cli" "$CLI_DIR/"
+cp "$WORK/bin/parchfold-cli" "$CLI_DIR/"
 copy_docs "$CLI_DIR"
-sign --options runtime "$CLI_DIR/nabu-cli"
-codesign --verify --strict --verbose=2 "$CLI_DIR/nabu-cli"
+sign --options runtime "$CLI_DIR/parchfold-cli"
+codesign --verify --strict --verbose=2 "$CLI_DIR/parchfold-cli"
 rm -f "$CLI_ZIP"
 ditto -c -k --keepParent "$CLI_DIR" "$CLI_ZIP"
 # A bare Mach-O can't carry a stapled ticket; Gatekeeper looks the notarization up online.
 if [[ "$NOTARIZE" = 1 ]]; then notarize "$CLI_ZIP"; fi
 
-"$WORK/bin/nabu-cli" --version
+"$WORK/bin/parchfold-cli" --version
 echo "==> done"
 ls -lh "$DMG" "$CLI_ZIP"

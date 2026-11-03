@@ -3563,60 +3563,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "743fb55ba31b18fb1ecef6bdc9aa2743314978ac084044301a7eee33fb99a20d"
 
 [[package]]
-name = "nabu"
-version = "0.15.0"
-dependencies = [
- "chrono",
- "craft-update",
- "eframe",
- "egui",
- "fmv-macos-events",
- "log",
- "pdfcraft-engine",
- "pdfcraft-ui-egui",
- "pollster 1.0.1",
- "raw-window-handle",
- "serde_json",
- "uds_windows",
- "wayland-client",
- "wayland-protocols",
- "windows",
- "winit",
- "winresource",
- "winsafe",
-]
-
-[[package]]
-name = "nabu-cli"
-version = "0.15.0"
-dependencies = [
- "base64 0.23.1",
- "pdfcraft-audit",
- "pdfcraft-automation",
- "pdfcraft-cos",
- "pdfcraft-engine",
- "pdfcraft-platform",
- "pdfcraft-preflight",
- "pdfcraft-render",
- "png 0.18.1",
- "rustix 1.1.5",
- "serde_json",
- "winresource",
-]
-
-[[package]]
-name = "nabu-web"
-version = "0.15.0"
-dependencies = [
- "eframe",
- "egui",
- "js-sys",
- "pdfcraft-ui-egui",
- "wasm-bindgen-futures",
- "web-sys",
-]
-
-[[package]]
 name = "naga"
 version = "30.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4210,6 +4156,60 @@ dependencies = [
  "primefield",
  "primeorder",
  "sha2 0.11.1",
+]
+
+[[package]]
+name = "parchfold"
+version = "0.15.0"
+dependencies = [
+ "chrono",
+ "craft-update",
+ "eframe",
+ "egui",
+ "fmv-macos-events",
+ "log",
+ "pdfcraft-engine",
+ "pdfcraft-ui-egui",
+ "pollster 1.0.1",
+ "raw-window-handle",
+ "serde_json",
+ "uds_windows",
+ "wayland-client",
+ "wayland-protocols",
+ "windows",
+ "winit",
+ "winresource",
+ "winsafe",
+]
+
+[[package]]
+name = "parchfold-cli"
+version = "0.15.0"
+dependencies = [
+ "base64 0.23.1",
+ "pdfcraft-audit",
+ "pdfcraft-automation",
+ "pdfcraft-cos",
+ "pdfcraft-engine",
+ "pdfcraft-platform",
+ "pdfcraft-preflight",
+ "pdfcraft-render",
+ "png 0.18.1",
+ "rustix 1.1.5",
+ "serde_json",
+ "winresource",
+]
+
+[[package]]
+name = "parchfold-web"
+version = "0.15.0"
+dependencies = [
+ "eframe",
+ "egui",
+ "js-sys",
+ "pdfcraft-ui-egui",
+ "wasm-bindgen-futures",
+ "web-sys",
 ]
 
 [[package]]

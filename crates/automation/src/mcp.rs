@@ -1,7 +1,7 @@
 //! A Model Context Protocol server over the automation tools.
 //!
 //! **Opt-in only.** Nothing in PdfCraft starts this server on its own: it runs when a user
-//! launches `nabu-cli mcp` (usually by adding that command to their agent's MCP
+//! launches `parchfold-cli mcp` (usually by adding that command to their agent's MCP
 //! configuration), and stops when its input closes. It opens no network port; the transport is
 //! newline-delimited JSON-RPC 2.0 over stdin/stdout.
 //!
@@ -153,7 +153,7 @@ impl McpServer {
                 Ok(json!({
                     "protocolVersion": version,
                     "capabilities": { "tools": { "listChanged": false }, "resources": { "listChanged": false, "subscribe": false } },
-                    "serverInfo": { "name": "nabu", "title": "Parchfold", "version": env!("CARGO_PKG_VERSION"), "websiteUrl": pdfcraft_engine::links::GITHUB },
+                    "serverInfo": { "name": "parchfold", "title": "Parchfold", "version": env!("CARGO_PKG_VERSION"), "websiteUrl": pdfcraft_engine::links::GITHUB },
                     "instructions": if self.compact { format!("{INSTRUCTIONS}{COMPACT_INSTRUCTIONS}") } else { INSTRUCTIONS.to_string() },
                 }))
             }
@@ -434,7 +434,7 @@ enum Resource {
 }
 
 fn parse_uri(uri: &str) -> Option<Resource> {
-    let rest = uri.strip_prefix("pdfcraft://doc/").or_else(|| uri.strip_prefix("nabu://doc/"))?;
+    let rest = uri.strip_prefix("pdfcraft://doc/").or_else(|| uri.strip_prefix("parchfold://doc/"))?;
     let (path, query) = rest.split_once('?').unwrap_or((rest, ""));
     let dpi = query.split('&').find_map(|kv| kv.strip_prefix("dpi=")).and_then(|v| v.parse::<f64>().ok());
     let parts: Vec<&str> = path.split('/').collect();
@@ -491,8 +491,8 @@ impl McpServer {
 
     fn read_resource(&mut self, uri: &str) -> Result<Value, (i64, String)> {
         if let Some(tool) = match uri {
-            "pdfcraft://document" | "nabu://document" => Some("doc_inspect"),
-            "pdfcraft://commands" | "nabu://commands" => Some("command_list"),
+            "pdfcraft://document" | "parchfold://document" => Some("doc_inspect"),
+            "pdfcraft://commands" | "parchfold://commands" => Some("command_list"),
             _ => None,
         } {
             let content = self.automation.call(tool, &json!({})).map_err(|e| (INVALID_PARAMS, e.to_string()))?;
@@ -653,7 +653,7 @@ mod tests {
         assert_eq!(replies[0]["error"]["code"], -32700);
         assert_eq!(replies[1]["error"]["code"], -32600);
         assert_eq!(replies[2]["id"], 1);
-        assert_eq!(replies[2]["result"]["serverInfo"]["name"], "nabu");
+        assert_eq!(replies[2]["result"]["serverInfo"]["name"], "parchfold");
     }
 
     #[test]
@@ -671,7 +671,7 @@ mod tests {
     #[test]
     fn resource_uris_parse() {
         assert_eq!(parse_uri("pdfcraft://doc/3/info"), Some(Resource::Info(3)));
-        assert_eq!(parse_uri("nabu://doc/3/info"), Some(Resource::Info(3)));
+        assert_eq!(parse_uri("parchfold://doc/3/info"), Some(Resource::Info(3)));
         assert_eq!(parse_uri("pdfcraft://doc/3/page/2/image?dpi=36"), Some(Resource::PageImage(3, 2, Some(36.0))));
         assert_eq!(parse_uri("pdfcraft://doc/3/page/2/text"), Some(Resource::PageText(3, 2)));
         assert_eq!(parse_uri("pdfcraft://doc/x/info"), None);

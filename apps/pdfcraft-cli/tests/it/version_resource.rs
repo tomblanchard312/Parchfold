@@ -1,5 +1,5 @@
-//! `nabu-cli.exe` carries a Windows version resource (`build.rs`), so Explorer, PowerShell's
-//! `VersionInfo` and inventory tools see its version and publisher, as they do for `nabu.exe`.
+//! `parchfold-cli.exe` carries a Windows version resource (`build.rs`), so Explorer, PowerShell's
+//! `VersionInfo` and inventory tools see its version and publisher, as they do for `parchfold.exe`.
 
 #![cfg(windows)]
 
@@ -29,15 +29,15 @@ fn string_value(resource: &[u8], key: &str) -> Option<String> {
 
 #[test]
 fn the_exe_has_version_info_with_the_package_version() {
-    let exe = std::fs::read(env!("CARGO_BIN_EXE_nabu-cli")).unwrap();
+    let exe = std::fs::read(env!("CARGO_BIN_EXE_parchfold-cli")).unwrap();
     let start = find(&exe, &utf16("VS_VERSION_INFO")).expect("no version resource");
     let resource = &exe[start..];
     for (key, value) in [
         ("ProductName", "Parchfold"),
         ("FileDescription", "Parchfold command-line tool"),
         ("LegalCopyright", "Copyright (c) the PdfCraft contributors. MIT OR Apache-2.0."),
-        ("OriginalFilename", "nabu-cli.exe"),
-        ("InternalName", "nabu-cli"),
+        ("OriginalFilename", "parchfold-cli.exe"),
+        ("InternalName", "parchfold-cli"),
         ("FileVersion", env!("CARGO_PKG_VERSION")),
         ("ProductVersion", env!("CARGO_PKG_VERSION")),
     ] {
