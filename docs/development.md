@@ -8,7 +8,7 @@ collects what the desktop app reads from its environment and where it writes its
 When local build storage is constrained, select the opt-in `low-disk` profile explicitly:
 
 ```sh
-cargo build --profile low-disk -p nabu-cli
+cargo build --profile low-disk -p parchfold-cli
 cargo test --profile low-disk -p pdfcraft-cos --lib
 ```
 
@@ -39,8 +39,8 @@ the current choice and the other valid settings.
 The existing opt-in UI control channel uses the same preference:
 
 ```sh
-nabu-cli ui --control /path/to/control.json set key=comment-tool-pinned value=true
-nabu-cli ui --control /path/to/control.json state
+parchfold-cli ui --control /path/to/control.json set key=comment-tool-pinned value=true
+parchfold-cli ui --control /path/to/control.json state
 ```
 
 `ui.state.comment_tool_pinned` reports the boolean. `ui.set` accepts `true` or `false` and refuses
@@ -83,10 +83,10 @@ Each launch moves the previous log to `pdfcraft.1.log` (and that one to `pdfcraf
 log of a run that crashed survives the next start. The file stops growing at 16 MiB. `--version`
 writes no file.
 
-By default PdfCraft's own crates (`nabu*`) log at `info` and everything else at `warn`.
+By default PdfCraft's own crates (`parchfold*`) log at `info` and everything else at `warn`.
 `RUST_LOG` replaces that with env_logger-style directives, for example `RUST_LOG=debug`,
 `RUST_LOG=warn,pdfcraft_render=trace` or `RUST_LOG=info,wgpu_core=warn`; a directive ending in `*`
-covers every target starting with it (`nabu*=debug`). The logger is
+covers every target starting with it (`parchfold*=debug`). The logger is
 `apps/pdfcraft/src/logging.rs`. It never records the control-channel token or document passwords.
 
 ## GPU surface limits

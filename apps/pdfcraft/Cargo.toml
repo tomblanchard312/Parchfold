@@ -1,5 +1,5 @@
 [package]
-name = "nabu"
+name = "parchfold"
 description = "Parchfold desktop app"
 version.workspace = true
 edition.workspace = true

@@ -1,6 +1,6 @@
 //! PdfCraft desktop app.
 //!
-//! Usage: `nabu [options] [files…]` (`-h` / `--help` prints a short version of this, [`USAGE`]).
+//! Usage: `parchfold [options] [files…]` (`-h` / `--help` prints a short version of this, [`USAGE`]).
 //! `--create-images [images…]` stages the images in one PDF and asks for the page DPI.
 //!
 //! View options (applied after the files open; also the seed of the UI control channel):
@@ -17,7 +17,7 @@
 //! `--control <file>` enables the UI control channel (off by default): the app listens on a random
 //! loopback port and writes `{"port", "token", "pid"}` to `<file>` (owner-only permissions). The
 //! app doesn't start if it can't.
-//! Agents then drive it with `nabu-cli ui --control <file> <method> …`.
+//! Agents then drive it with `parchfold-cli ui --control <file> <method> …`.
 
 // Release builds on Windows are GUI-subsystem programs, so launching the app doesn't open a console
 // window next to it (#57). `--version` and diagnostics then go nowhere when started from a terminal
@@ -56,22 +56,22 @@ const APP_ICON_PNG: &[u8] = include_bytes!("../../../assets/app-icon/pdfcraft-10
 const APP_ICON_PNG: &[u8] = include_bytes!("../../../assets/app-icon/hicolor/256x256/apps/io.github.tomblanchard312.Nabu.png");
 
 /// What `-h` / `--help` prints (#4076): a hint, not the full option list (that is this file's
-/// doc comment and the README). Scripts want `nabu-cli`, which never opens a window.
+/// doc comment and the README). Scripts want `parchfold-cli`, which never opens a window.
 const USAGE: &str = "\
-Usage: nabu [options] [files…]
+Usage: parchfold [options] [files…]
 
 Opens the files in the Parchfold desktop app.
 
 Options:
   --new-window                open a window of its own instead of passing the files to a running Parchfold
   --create-images [images…]   put the images in one PDF and ask for the page DPI
-  --control <file>            enable the UI control channel (nabu-cli ui --control <file> …)
+  --control <file>            enable the UI control channel (parchfold-cli ui --control <file> …)
   --page N, --zoom 150, --layout continuous, --theme dark, …
                               view settings applied once the files are open
   -h, --help                  print this and exit
   --version                   print the version and exit
 
-To inspect, convert or edit PDFs from a script, use nabu-cli (nabu-cli --help).";
+To inspect, convert or edit PDFs from a script, use parchfold-cli (parchfold-cli --help).";
 
 /// Print `text` for `--help` and `--version`. `println!` would panic on a full or closed
 /// standard output; this exits normally instead.
@@ -135,7 +135,7 @@ fn path_from_arg(arg: String) -> String {
     String::from_utf8(out).unwrap_or(arg)
 }
 
-/// Some programs start the PDF reader with the path unquoted (`nabu.exe P:\Docs\01 Contract.PDF`),
+/// Some programs start the PDF reader with the path unquoted (`parchfold.exe P:\Docs\01 Contract.PDF`),
 /// so a path with spaces arrives split into several arguments (Acrobat accepts this). When an
 /// argument names no file but it and the ones after it, joined with one space, do, rejoin them
 /// (the longest such run). Anything else is kept as given. Runs of several spaces can't be recovered: the split has lost them.
@@ -186,7 +186,7 @@ fn main() -> eframe::Result {
             log::error!("{report}");
         } else {
             // `eprintln!` panics on a broken stderr pipe, and a panic inside the panic hook aborts.
-            let _ = std::io::Write::write_fmt(&mut std::io::stderr(), format_args!("nabu: {report}\n"));
+            let _ = std::io::Write::write_fmt(&mut std::io::stderr(), format_args!("parchfold: {report}\n"));
         }
     }));
     let mut files = Vec::new();
@@ -381,9 +381,12 @@ fn app_creator<'a>(
         app.enable_desktop_theme();
         // The system's reopen-windows choice (macOS) starts the preference; a saved choice replaces it.
         app.reopen_last_session = reopen::system_default();
-        if let Some(json) =
-            cc.storage.and_then(|s| s.get_string("nabu").or_else(|| s.get_string("nabu")).or_else(|| s.get_string(LEGACY_STORAGE_KEY)))
-        {
+        if let Some(json) = cc.storage.and_then(|s| {
+            s.get_string("parchfold")
+                .or_else(|| s.get_string("nabu"))
+                .or_else(|| s.get_string("pdfcraft"))
+                .or_else(|| s.get_string(LEGACY_STORAGE_KEY))
+        }) {
             app.restore(&json);
         }
         app.window_state = pdfcraft_ui_egui::window_state::WindowState::started_with(cc.storage);

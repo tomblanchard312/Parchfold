@@ -96,9 +96,9 @@
     <?endif?>
     <ComponentGroup Id="PdfcraftFiles" Directory="INSTALLFOLDER">
       <Component Id="PdfcraftApp" Guid="E724C1C6-091F-4E21-A685-80D089FDBE21">
-        <File Id="PdfcraftExe" Source="$(var.BinDir)\nabu.exe" KeyPath="yes" />
+        <File Id="PdfcraftExe" Source="$(var.BinDir)\parchfold.exe" KeyPath="yes" />
 
-        <RegistryValue Root="HKMU" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\nabu.exe" Value="[#PdfcraftExe]" Type="string" />
+        <RegistryValue Root="HKMU" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\parchfold.exe" Value="[#PdfcraftExe]" Type="string" />
 
         <!-- PDF files (#107): Parchfold is offered under "Open with" and in Settings ▸ Default
              apps, through Windows' Default Programs registration (a ProgID, OpenWithProgids,
@@ -117,10 +117,10 @@
              Handlers", Microsoft Learn). -->
         <RegistryValue Root="HKMU" Key="Software\Classes\Nabu.Document" Name="TypeOverlay" Value="" Type="string" />
         <RegistryValue Root="HKMU" Key="Software\Classes\.pdf\OpenWithProgids" Name="Nabu.Document" Value="" Type="string" />
-        <RegistryValue Root="HKMU" Key="Software\Classes\Applications\nabu.exe" Name="FriendlyAppName" Value="Nabu" Type="string" />
-        <RegistryValue Root="HKMU" Key="Software\Classes\Applications\nabu.exe\DefaultIcon" Value="&quot;[#PdfcraftExe]&quot;,-2" Type="string" />
-        <RegistryValue Root="HKMU" Key="Software\Classes\Applications\nabu.exe\SupportedTypes" Name=".pdf" Value="" Type="string" />
-        <RegistryValue Root="HKMU" Key="Software\Classes\Applications\nabu.exe\shell\open\command" Value="&quot;[#PdfcraftExe]&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKMU" Key="Software\Classes\Applications\parchfold.exe" Name="FriendlyAppName" Value="Parchfold" Type="string" />
+        <RegistryValue Root="HKMU" Key="Software\Classes\Applications\parchfold.exe\DefaultIcon" Value="&quot;[#PdfcraftExe]&quot;,-2" Type="string" />
+        <RegistryValue Root="HKMU" Key="Software\Classes\Applications\parchfold.exe\SupportedTypes" Name=".pdf" Value="" Type="string" />
+        <RegistryValue Root="HKMU" Key="Software\Classes\Applications\parchfold.exe\shell\open\command" Value="&quot;[#PdfcraftExe]&quot; &quot;%1&quot;" Type="string" />
         <RegistryValue Root="HKMU" Key="Software\Nabu\Capabilities" Name="ApplicationName" Value="Parchfold" Type="string" />
         <RegistryValue Root="HKMU" Key="Software\Nabu\Capabilities" Name="ApplicationDescription" Value="Open-source PDF workbench" Type="string" />
         <RegistryValue Root="HKMU" Key="Software\Nabu\Capabilities" Name="ApplicationIcon" Value="[#PdfcraftExe],0" Type="string" />
@@ -129,18 +129,18 @@
       <RegistryValue Root="HKMU" Key="Software\Nabu" Name="InstallDir" Value="[INSTALLFOLDER]" Type="string" />
       </Component>
 
-      <!-- Shortcuts (#143) are plain links to nabu.exe, not advertised MSI shortcuts: advertised
+      <!-- Shortcuts (#143) are plain links to parchfold.exe, not advertised MSI shortcuts: advertised
            ones point at a Windows Installer descriptor rather than the program, which Windows can't
            use as a file handler (#107), and 0.2.1's advertised one went missing from the Start menu
            (#143). Each has its own component with an HKLM key path, so Windows Installer removes it
            on uninstall; in this per-machine package both folders are the all-users ones. -->
       <Component Id="PdfcraftStartMenuShortcut" Directory="ProgramMenuFolder" Guid="DC028192-C233-4F99-9A77-ED458C60DF26">
-        <Shortcut Id="StartMenuShortcut" Name="Nabu" Description="Nabu PDF workbench" Target="[#PdfcraftExe]" WorkingDirectory="INSTALLFOLDER" Icon="PdfcraftIcon.ico" IconIndex="0" />
+        <Shortcut Id="StartMenuShortcut" Name="Nabu" Description="Parchfold PDF workbench" Target="[#PdfcraftExe]" WorkingDirectory="INSTALLFOLDER" Icon="PdfcraftIcon.ico" IconIndex="0" />
         <RegistryValue Root="HKMU" Key="Software\Nabu\Shortcuts" Name="StartMenu" Type="integer" Value="1" KeyPath="yes" />
       </Component>
 
       <Component Id="PdfcraftDesktopShortcut" Directory="DesktopFolder" Guid="F6948627-32AB-4D78-8865-0FDF417CE442" Condition="INSTALLDESKTOPSHORTCUT = 1">
-        <Shortcut Id="DesktopShortcut" Name="Nabu" Description="Nabu PDF workbench" Target="[#PdfcraftExe]" WorkingDirectory="INSTALLFOLDER" Icon="PdfcraftIcon.ico" IconIndex="0" />
+        <Shortcut Id="DesktopShortcut" Name="Nabu" Description="Parchfold PDF workbench" Target="[#PdfcraftExe]" WorkingDirectory="INSTALLFOLDER" Icon="PdfcraftIcon.ico" IconIndex="0" />
         <RegistryValue Root="HKMU" Key="Software\Nabu\Shortcuts" Name="Desktop" Type="integer" Value="1" KeyPath="yes" />
       </Component>
 
@@ -197,7 +197,7 @@
       </Component>
 
       <Component Id="PdfcraftCli">
-        <File Id="PdfcraftCliExe" Source="$(var.BinDir)\nabu-cli.exe" KeyPath="yes" />
+        <File Id="PdfcraftCliExe" Source="$(var.BinDir)\parchfold-cli.exe" KeyPath="yes" />
       </Component>
       <!-- The embedded PDF icon's ISC notice and project licences travel with the binaries. -->
       <Component Id="PdfcraftDocumentIconLicense">
@@ -214,7 +214,7 @@
       </Component>
     </ComponentGroup>
 
-    <!-- OCR models (#103), with their licences and ATTRIBUTION.txt, in models\ beside nabu.exe
+    <!-- OCR models (#103), with their licences and ATTRIBUTION.txt, in models\ beside parchfold.exe
          where the app looks for them: every file `cargo xtask models` fetched (package.ps1), one
          component each, so new models ship without naming them here. -->
     <ComponentGroup Id="PdfcraftModels" Directory="ModelsFolder">

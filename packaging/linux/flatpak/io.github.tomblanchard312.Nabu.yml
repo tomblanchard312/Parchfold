@@ -16,7 +16,7 @@ runtime-version: '25.08'
 sdk: org.freedesktop.Sdk
 sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
-command: nabu
+command: parchfold
 finish-args:
   - --filesystem=xdg-run/sharedai
   - --socket=pulseaudio
@@ -42,16 +42,16 @@ finish-args:
 build-options:
   append-path: /usr/lib/sdk/rust-stable/bin
 modules:
-  - name: nabu
+  - name: parchfold
     buildsystem: simple
     build-options:
       env:
-        CARGO_HOME: /run/build/nabu/cargo
+        CARGO_HOME: /run/build/parchfold/cargo
         CARGO_NET_OFFLINE: 'true'
     build-commands:
-      - cargo --offline build --release --locked -p nabu
-      - install -Dm755 target/release/nabu /app/bin/nabu
-      - install -Dm644 NOTICE /app/share/doc/nabu/NOTICE
+      - cargo --offline build --release --locked -p parchfold
+      - install -Dm755 target/release/parchfold /app/bin/parchfold
+      - install -Dm644 NOTICE /app/share/doc/parchfold/NOTICE
       - install -Dm644 packaging/linux/io.github.tomblanchard312.Nabu.desktop /app/share/applications/io.github.tomblanchard312.Nabu.desktop
       - install -Dm644 packaging/linux/io.github.tomblanchard312.Nabu.mime.xml /app/share/mime/packages/io.github.tomblanchard312.Nabu.xml
       - mkdir -p /app/share/icons && cp -R assets/app-icon/hicolor /app/share/icons/

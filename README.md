@@ -1,7 +1,4 @@
 <p align="center">
-
-> The command examples and package names below use the [renamed Parchfold build](https://github.com/tomblanchard312/Parchfold/tree/feat/enki-character). The build instructions check out that branch.
-<p align="center">
   <img src="assets/app-icon/nabu-logo.png" width="460" alt="Parchfold: blue folded-document N logo">
 </p>
 
@@ -366,7 +363,7 @@ PdfCraft is a clean-room implementation. Its behaviour comes from the ISO 32000 
 Building needs Rust 1.95 or later.
 
 ```sh
-git clone --branch feat/enki-character https://github.com/tomblanchard312/Parchfold.git parchfold
+git clone --branch main https://github.com/tomblanchard312/Parchfold.git parchfold
 cd parchfold
 cargo xtask models                                # fetch the OCR models Scan & OCR needs (release builds include them)
 cargo run --release -p parchfold -- some.pdf     # desktop app

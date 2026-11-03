@@ -13,10 +13,10 @@
   condition branch that fired.
 
 .EXAMPLE
-  pwsh packaging/windows/security-audit.ps1 -Path dist\release\pdfcraft-0.5.0-windows-x64-portable\nabu.exe
+  pwsh packaging/windows/security-audit.ps1 -Path dist\release\pdfcraft-0.5.0-windows-x64-portable\parchfold.exe
 
 .EXAMPLE
-  pwsh packaging/windows/security-audit.ps1 -Path .\nabu.exe, .\nabu-cli.exe -YaraExe C:\tools\yara64.exe -YaraRule C:\rules\CobaltStrikeBeacon.yar
+  pwsh packaging/windows/security-audit.ps1 -Path .\parchfold.exe, .\parchfold-cli.exe -YaraExe C:\tools\yara64.exe -YaraRule C:\rules\CobaltStrikeBeacon.yar
 #>
 param(
   [Parameter(Mandatory)] [string[]] $Path,

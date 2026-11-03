@@ -1,4 +1,4 @@
-//! `nabu-cli mcp --compact`: the flag reaches the server, `--root` is still honoured, and plain `mcp` still lists every tool.
+//! `parchfold-cli mcp --compact`: the flag reaches the server, `--root` is still honoured, and plain `mcp` still lists every tool.
 #![cfg(feature = "mcp")]
 
 use std::io::Write as _;
@@ -6,9 +6,9 @@ use std::process::{Command, Stdio};
 
 use serde_json::{Value, json};
 
-/// Run `nabu-cli mcp <flags>` over an initialize request plus `requests` and return the replies to `requests`.
+/// Run `parchfold-cli mcp <flags>` over an initialize request plus `requests` and return the replies to `requests`.
 fn session(flags: &[&str], requests: &[Value]) -> Vec<Value> {
-    let mut child = Command::new(env!("CARGO_BIN_EXE_nabu-cli"))
+    let mut child = Command::new(env!("CARGO_BIN_EXE_parchfold-cli"))
         .arg("mcp")
         .args(flags)
         .stdin(Stdio::piped())
@@ -31,7 +31,7 @@ fn request(id: u64, method: &str, params: Value) -> Value {
     json!({ "jsonrpc": "2.0", "id": id, "method": method, "params": params })
 }
 
-/// The `tools/list` tool names of `nabu-cli mcp <flags>`.
+/// The `tools/list` tool names of `parchfold-cli mcp <flags>`.
 fn listed_tools(flags: &[&str]) -> Vec<String> {
     let reply = session(flags, &[request(1, "tools/list", json!({}))]).remove(0);
     reply["result"]["tools"].as_array().unwrap().iter().map(|t| t["name"].as_str().unwrap().to_string()).collect()
@@ -40,7 +40,7 @@ fn listed_tools(flags: &[&str]) -> Vec<String> {
 #[test]
 fn mcp_rejects_unknown_options_before_starting_the_server() {
     for option in ["--totally-bogus-flag", "--rot", "--root=."] {
-        let out = Command::new(env!("CARGO_BIN_EXE_nabu-cli")).args(["mcp", option]).output().expect("run CLI");
+        let out = Command::new(env!("CARGO_BIN_EXE_parchfold-cli")).args(["mcp", option]).output().expect("run CLI");
 
         let stderr = String::from_utf8_lossy(&out.stderr);
         assert!(!out.status.success(), "mcp {option} unexpectedly succeeded");
@@ -64,10 +64,10 @@ fn compact_flag_shortens_the_tool_list() {
 
 #[test]
 fn compact_flag_keeps_the_root() {
-    let root = std::env::temp_dir().join(format!("nabu-cli-compact-root-{}", std::process::id()));
+    let root = std::env::temp_dir().join(format!("parchfold-cli-compact-root-{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&root);
     std::fs::create_dir_all(&root).unwrap();
-    let outside = std::env::temp_dir().join(format!("nabu-cli-compact-outside-{}.pdf", std::process::id()));
+    let outside = std::env::temp_dir().join(format!("parchfold-cli-compact-outside-{}.pdf", std::process::id()));
     let outside = outside.to_string_lossy().into_owned();
     let root_arg = root.to_string_lossy().into_owned();
     let open_outside =

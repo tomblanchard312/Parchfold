@@ -11,6 +11,21 @@ use egui::{Color32, Rect, Response, Stroke, Vec2};
 use crate::icon_data::ICONS;
 use crate::theme::{self, Tokens};
 
+/// Cached companion artwork; a malformed asset leaves the text fully usable.
+pub(crate) fn enki_badge(ui: &mut egui::Ui) {
+    let key = egui::Id::unique("enki.character.badge");
+    let texture = ui.ctx().data(|data| data.get_temp::<egui::TextureHandle>(key)).or_else(|| {
+        let rgba = image::load_from_memory(include_bytes!("../../../../assets/icons/enki-character.png")).ok()?.into_rgba8();
+        let pixels = egui::ColorImage::from_rgba_unmultiplied([rgba.width() as usize, rgba.height() as usize], rgba.as_raw());
+        let texture = ui.ctx().load_texture("Enki character", pixels, egui::TextureOptions::LINEAR);
+        ui.ctx().data_mut(|data| data.insert_temp(key, texture.clone()));
+        Some(texture)
+    });
+    if let Some(texture) = texture {
+        ui.add(egui::Image::new((texture.id(), texture.size_vec2())).fit_to_exact_size(egui::vec2(36.0, 36.0))).on_hover_text("Enki");
+    }
+}
+
 fn white_icons() -> &'static SvgIconSet {
     static MAP: OnceLock<SvgIconSet> = OnceLock::new();
     MAP.get_or_init(|| SvgIconSet::new(ICONS, SvgStyle { current_color: "#ffffff", stroke_width: Some("1.75") }, "bytes://icons/", "square"))
@@ -188,6 +203,30 @@ mod tests {
                     }
                 }
             }
+        }
+    }
+}
+
+#[cfg(test)]
+mod enki_companion_tests {
+    use super::*;
+    #[test]
+    fn companion_is_transparent_and_its_texture_is_reused() {
+        let rgba = image::load_from_memory(include_bytes!("../../../../assets/icons/enki-character.png")).unwrap().into_rgba8();
+        assert_eq!(rgba.dimensions(), (256, 256));
+        assert!(rgba.pixels().any(|pixel| pixel[3] == 0));
+        let ctx = egui::Context::default();
+        let mut expected = None;
+        for _ in 0..3 {
+            let mut output = ctx.run_ui(egui::RawInput::default(), enki_badge);
+            let texture = ctx.data(|data| data.get_temp::<egui::TextureHandle>(egui::Id::unique("enki.character.badge"))).unwrap();
+            if let Some(expected) = expected {
+                assert_eq!(texture.id(), expected);
+            } else {
+                expected = Some(texture.id());
+            }
+            assert!(!output.shapes.is_empty());
+            output.textures_delta.clear();
         }
     }
 }

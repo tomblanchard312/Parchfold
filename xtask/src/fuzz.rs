@@ -2,7 +2,7 @@
 //!
 //! Seeds are small PDFs (synthetic ones, plus pdf.js corpus files under 64 KB when `corpus/` is
 //! present). Each iteration mutates a seed, writes it to `fuzz-out/work/`, and runs
-//! `nabu-cli check-one <file> --edit` in a child process with a timeout. That opens,
+//! `parchfold-cli check-one <file> --edit` in a child process with a timeout. That opens,
 //! inspects, renders and extracts text from every page (the bootstrap renderer), then runs our
 //! object layer end to end: decode streams, edit, save incrementally and in full, reopen.
 //!
@@ -330,10 +330,10 @@ pub fn run(args: &[String]) -> Result<()> {
 
     let status = Command::new(std::env::var("CARGO").unwrap_or_else(|_| "cargo".into()))
         .current_dir(root())
-        .args(["build", "--release", "-q", "-p", "nabu-cli"])
+        .args(["build", "--release", "-q", "-p", "parchfold-cli"])
         .status()?;
     if !status.success() {
-        bail!("building nabu-cli failed");
+        bail!("building parchfold-cli failed");
     }
     let exe = release_cli();
     if !exe.is_file() {

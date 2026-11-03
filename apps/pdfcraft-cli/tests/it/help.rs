@@ -3,7 +3,7 @@
 
 use std::process::{Command, Output};
 
-const BIN: &str = env!("CARGO_BIN_EXE_nabu-cli");
+const BIN: &str = env!("CARGO_BIN_EXE_parchfold-cli");
 
 fn run(args: &[&str]) -> Output {
     Command::new(BIN).args(args).output().unwrap()
@@ -20,7 +20,7 @@ fn help_flags_print_full_usage_to_stdout() {
         assert!(out.status.success(), "{args:?} exited {:?}", out.status);
         let stdout = text(&out.stdout);
         // Per-command options, not just the command list.
-        assert!(stdout.contains("nabu-cli render <file.pdf> --page N"), "{args:?}: {stdout}");
+        assert!(stdout.contains("parchfold-cli render <file.pdf> --page N"), "{args:?}: {stdout}");
         assert!(stdout.contains("--every N"), "{args:?}: {stdout}");
         assert!(out.stderr.is_empty(), "{args:?}: {}", text(&out.stderr));
     }
@@ -31,7 +31,7 @@ fn no_command_fails_with_usage_on_stderr() {
     let out = run(&[]);
     assert!(!out.status.success());
     assert!(out.stdout.is_empty());
-    assert!(text(&out.stderr).contains("nabu-cli render <file.pdf> --page N"));
+    assert!(text(&out.stderr).contains("parchfold-cli render <file.pdf> --page N"));
 }
 
 /// `mcp` is listed only when the build has it (`--no-default-features` leaves it out).
@@ -39,11 +39,11 @@ fn no_command_fails_with_usage_on_stderr() {
 fn usage_lists_mcp_only_when_built_with_it() {
     let out = run(&["--help"]);
     let stdout = text(&out.stdout);
-    assert_eq!(stdout.contains("nabu-cli mcp"), cfg!(feature = "mcp"), "{stdout}");
+    assert_eq!(stdout.contains("parchfold-cli mcp"), cfg!(feature = "mcp"), "{stdout}");
     assert_eq!(stdout.contains("--compact"), cfg!(feature = "mcp"), "{stdout}");
     // The lines around it are still there.
-    assert!(stdout.contains("nabu-cli run    --script steps.json"), "{stdout}");
-    assert!(stdout.contains("nabu-cli ui     --control FILE"), "{stdout}");
+    assert!(stdout.contains("parchfold-cli run    --script steps.json"), "{stdout}");
+    assert!(stdout.contains("parchfold-cli ui     --control FILE"), "{stdout}");
 }
 
 #[cfg(not(feature = "mcp"))]
@@ -61,5 +61,5 @@ fn unknown_command_names_it_and_points_to_help() {
     assert!(!out.status.success());
     let stderr = text(&out.stderr);
     assert!(stderr.contains("unknown command 'frobnicate'"), "{stderr}");
-    assert!(stderr.contains("nabu-cli --help"), "{stderr}");
+    assert!(stderr.contains("parchfold-cli --help"), "{stderr}");
 }

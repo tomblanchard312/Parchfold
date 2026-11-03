@@ -4,7 +4,7 @@
 use std::process::{Command, Output, Stdio};
 use std::time::{Duration, Instant};
 
-const BIN: &str = env!("CARGO_BIN_EXE_nabu");
+const BIN: &str = env!("CARGO_BIN_EXE_parchfold");
 
 /// Run the app with `args`, failing if it is still running after 60 s (it opened its window).
 fn run(args: &[&str], stdout: Stdio) -> Output {
@@ -13,7 +13,7 @@ fn run(args: &[&str], stdout: Stdio) -> Output {
     while child.try_wait().unwrap().is_none() {
         if Instant::now() > deadline {
             let _ = child.kill();
-            panic!("nabu {args:?} did not exit: it started the app instead");
+            panic!("parchfold {args:?} did not exit: it started the app instead");
         }
         std::thread::sleep(Duration::from_millis(50));
     }
@@ -26,8 +26,8 @@ fn help_prints_usage_and_exits() {
         let out = run(&[flag], Stdio::piped());
         assert!(out.status.success(), "{flag}: {:?} {}", out.status, String::from_utf8_lossy(&out.stderr));
         let stdout = String::from_utf8_lossy(&out.stdout);
-        assert!(stdout.starts_with("Usage: nabu [options] [files…]"), "{flag}: {stdout}");
-        assert!(stdout.contains("nabu-cli"), "{flag}: points scripts to the CLI: {stdout}");
+        assert!(stdout.starts_with("Usage: parchfold [options] [files…]"), "{flag}: {stdout}");
+        assert!(stdout.contains("parchfold-cli"), "{flag}: points scripts to the CLI: {stdout}");
     }
     // Wherever it is on the command line, and with files named.
     let out = run(&["missing.pdf", "--help"], Stdio::piped());

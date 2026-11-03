@@ -3,6 +3,7 @@
 # exports VERSION, RELEASE and NFPM_ARCH.
 #
 #   nfpm package -f packaging/linux/nfpm.yaml -p deb -t dist/release/
+# Keep the package identity so package managers upgrade existing Nabu installs.
 name: nabu
 arch: ${NFPM_ARCH}
 platform: linux
@@ -16,12 +17,12 @@ section: graphics
 priority: optional
 maintainer: ${PDFCRAFT_MAINTAINER}
 vendor: Learning Machines LLC
-homepage: https://getartcraft.com/apps/nabu
+homepage: https://github.com/tomblanchard312/Parchfold
 license: MIT OR Apache-2.0
 description: |-
   Open-source, native PDF workbench: read, comment, fill and sign forms,
   organize, combine, split, edit, redact, protect and export PDFs.
-  Includes nabu-cli, a headless command runner and opt-in MCP server.
+  Includes parchfold-cli, a headless command runner and opt-in MCP server.
 
 # The binaries link only glibc and libgcc_s directly. Windowing (X11/Wayland, xkbcommon) and the
 # GPU (Vulkan, EGL/GL) are loaded at runtime, so they are dependencies/recommendations here
@@ -69,11 +70,11 @@ overrides:
       - xdg-desktop-portal
 
 contents:
-  - src: ${STAGE}/usr/bin/nabu
-    dst: /usr/bin/nabu
+  - src: ${STAGE}/usr/bin/parchfold
+    dst: /usr/bin/parchfold
     file_info: { mode: 0755 }
-  - src: ${STAGE}/usr/bin/nabu-cli
-    dst: /usr/bin/nabu-cli
+  - src: ${STAGE}/usr/bin/parchfold-cli
+    dst: /usr/bin/parchfold-cli
     file_info: { mode: 0755 }
   - src: ${STAGE}/usr/share/
     dst: /usr/share/

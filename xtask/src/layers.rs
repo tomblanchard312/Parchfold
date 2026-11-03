@@ -85,9 +85,9 @@ pub const TABLE: &[(&str, Class)] = &[
     ("testkit", Class::Testkit),
     ("oracle", Class::Testkit),
     // L8 apps + tooling
-    ("nabu", Class::Exempt),
-    ("nabu-cli", Class::Exempt),
-    ("nabu-web", Class::Exempt),
+    ("parchfold", Class::Exempt),
+    ("parchfold-cli", Class::Exempt),
+    ("parchfold-web", Class::Exempt),
     ("xtask", Class::Exempt),
 ];
 
@@ -287,7 +287,7 @@ mod tests {
             c("pdfcraft-render", &[("hayro", Normal, false), ("lopdf", Normal, false)]),
             c("pdfcraft-engine", &[("pdfcraft-render", Normal, true)]),
             c("pdfcraft-ui-egui", &[("pdfcraft-engine", Normal, true), ("egui", Normal, false), ("egui_kittest", Dev, false)]),
-            c("nabu", &[("pdfcraft-ui-egui", Normal, true)]),
+            c("parchfold", &[("pdfcraft-ui-egui", Normal, true)]),
         ];
         assert!(check(&g).is_empty(), "{:?}", check(&g));
     }
@@ -354,7 +354,7 @@ mod tests {
 
     #[test]
     fn apps_exempt() {
-        for app in ["nabu", "nabu-cli", "nabu-web", "xtask"] {
+        for app in ["parchfold", "parchfold-cli", "parchfold-web", "xtask"] {
             assert!(check(&[c(app, &[("egui", Normal, false), ("pdfcraft-ui-egui", Normal, true)])]).is_empty());
         }
     }

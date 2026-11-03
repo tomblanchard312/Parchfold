@@ -1,6 +1,6 @@
 {
-  "id": "nabu",
-  "name": "Nabu",
+  "id": "parchfold",
+  "name": "Parchfold",
   "upgradeCode": "F3F4A640-9263-4017-BAC4-593EEB64C1AA",
   "sources": [
     "pdfcraft.wxs",
@@ -14,13 +14,13 @@
     "LICENSE-MIT",
     "LICENSE-document.txt",
     "NOTICE",
-    "nabu-cli.exe",
-    "nabu.exe"
+    "parchfold-cli.exe",
+    "parchfold.exe"
   ],
   "registry": [
     [
       "-1",
-      "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\nabu.exe",
+      "Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\parchfold.exe",
       "",
       "[#PdfcraftExe]"
     ],
@@ -56,25 +56,25 @@
     ],
     [
       "-1",
-      "Software\\Classes\\Applications\\nabu.exe",
+      "Software\\Classes\\Applications\\parchfold.exe",
       "FriendlyAppName",
-      "Nabu"
+      "Parchfold"
     ],
     [
       "-1",
-      "Software\\Classes\\Applications\\nabu.exe\\DefaultIcon",
+      "Software\\Classes\\Applications\\parchfold.exe\\DefaultIcon",
       "",
       "\"[#PdfcraftExe]\",-2"
     ],
     [
       "-1",
-      "Software\\Classes\\Applications\\nabu.exe\\SupportedTypes",
+      "Software\\Classes\\Applications\\parchfold.exe\\SupportedTypes",
       ".pdf",
       ""
     ],
     [
       "-1",
-      "Software\\Classes\\Applications\\nabu.exe\\shell\\open\\command",
+      "Software\\Classes\\Applications\\parchfold.exe\\shell\\open\\command",
       "",
       "\"[#PdfcraftExe]\" \"%1\""
     ],

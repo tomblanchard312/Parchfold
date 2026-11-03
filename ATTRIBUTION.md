@@ -4,7 +4,7 @@
 
 Every asset PdfCraft includes, bundles or uses to build its published material, with its author, source and licence. The policy is in [AGENTS.md](AGENTS.md) §1. The machine-readable list, with the SHA-256 of every asset but the translation catalogs, is [ATTRIBUTION.toml](ATTRIBUTION.toml). Licence texts are kept beside the assets and summarised in [NOTICE](NOTICE).
 
-## In this repository (283)
+## In this repository (284)
 
 | Asset | Title | Author | Licence | Source | Used for |
 |---|---|---|---|---|---|
@@ -291,6 +291,7 @@ Every asset PdfCraft includes, bundles or uses to build its published material, 
 | `crates/ui-egui/src/i18n/ca.tsv` | Catalan interface translation catalog | PdfCraft contributors | MIT OR Apache-2.0 | Contributor-original: clean-room translations of PdfCraft's English UI labels, written from their meaning; no proprietary localisation resources; 2026-10-22 page-gap labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 text-field-table labels are contributor-original AI-assisted translations from English, not separately native-reviewed; 2026-10-22 secured-document notice labels are contributor-original AI-assisted translations from English, not separately native-reviewed; the 2026-10-22 reply-count label is an AI-assisted translation from English, not separately native-reviewed | Catalan UI strings, compiled in by crates/ui-egui/src/i18n.rs |
 | `assets/app-icon/nabu-source.png` | Nabu icon | Nabu contributors (AI-assisted) | MIT OR Apache-2.0 | Original OpenAI image generation, 2026-10-28 | Nabu branding and icon generation |
 | `assets/app-icon/nabu-logo.png` | Nabu logo | Tom Blanchard (original AI-assisted vector artwork) | MIT OR Apache-2.0 | Contributor-original: blue-and-gold folded PDF page; SVG geometry and derived platform images, 2026-10-29. Wordmark rendered with bundled OFL Inter. | Nabu branding and icon generation |
+| `assets/icons/enki-character.png` | Enki companion character | tomblanchard312 (AI-assisted original artwork) | MIT | Contributor-original: created with OpenAI image generation, 2026-10-30; blue-first head and horned cap, muted gold accents, no water elements; downsampled from the Enki repository master | Enki project badge in About; does not imply a configured inference provider |
 
 ## Compiled in through dependencies (6)
 

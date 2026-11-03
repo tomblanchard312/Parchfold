@@ -1,6 +1,6 @@
-//! Windows only: embed the app icon and version info (VERSIONINFO) into `nabu.exe`, so it
+//! Windows only: embed the app icon and version info (VERSIONINFO) into `parchfold.exe`, so it
 //! shows in Explorer, the taskbar, the Start menu and Alt-Tab. A separate PDF document icon
-//! uses resource ID 2; the installer references it as `nabu.exe,-2`.
+//! uses resource ID 2; the installer references it as `parchfold.exe,-2`.
 //!
 //! On every other target this does nothing. A missing resource compiler is a warning, so a
 //! cross-compile from macOS or Linux still links, unless `PDFCRAFT_REQUIRE_WINRES=1` turns it
@@ -25,13 +25,13 @@ fn main() {
         .set("ProductName", "Parchfold")
         .set("FileDescription", "Parchfold PDF workbench")
         .set("LegalCopyright", "Copyright (c) the PdfCraft contributors. MIT OR Apache-2.0.")
-        .set("OriginalFilename", "nabu.exe")
-        .set("InternalName", "nabu");
+        .set("OriginalFilename", "parchfold.exe")
+        .set("InternalName", "parchfold");
     if let Err(e) = res.compile() {
         if std::env::var_os("PDFCRAFT_REQUIRE_WINRES").is_some() {
             println!("cargo::error=embedding Windows resources failed: {e}");
             return;
         }
-        println!("cargo:warning=nabu.exe built without icon/version resources: {e}");
+        println!("cargo:warning=parchfold.exe built without icon/version resources: {e}");
     }
 }
