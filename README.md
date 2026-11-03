@@ -1,6 +1,6 @@
 <p align="center">
 
-> **Product name:** Parchfold (formerly Nabu). Existing application IDs, settings directories, command names and repository URLs remain compatible.
+> The command examples and package names below use the [renamed Parchfold build](https://github.com/tomblanchard312/Parchfold/tree/feat/enki-character). The build instructions check out that branch.
 <p align="center">
   <img src="assets/app-icon/nabu-logo.png" width="460" alt="Parchfold: blue folded-document N logo">
 </p>
@@ -190,9 +190,9 @@ Nothing quietly disappears along the way:
 Every page of a combined document renders pixel-identical to its source.
 
 ```sh
-nabu-cli combine report.pdf appendix.pdf --out combined.pdf
-nabu-cli extract report.pdf --pages 1,3,5-8 --out highlights.pdf
-nabu-cli split   report.pdf --every 10 --out-dir parts/
+parchfold-cli combine report.pdf appendix.pdf --out combined.pdf
+parchfold-cli extract report.pdf --pages 1,3,5-8 --out highlights.pdf
+parchfold-cli split   report.pdf --every 10 --out-dir parts/
 ```
 
 ---
@@ -256,12 +256,12 @@ Press <kbd>⌘K</kbd> to search every tool and command, or browse the **All tool
 - **Native on macOS, Windows, Linux and FreeBSD**, and **in the browser** through WebAssembly, from the same Rust codebase. Windows builds come for x64, x86 and ARM64 (Windows on ARM, no emulation); every ARM64 change is tested on ARM64 hardware in CI.
 - **Private by design.** Documents never leave your machine. There's no account, no telemetry and no cloud processing.
 - **Engine first.** Parsing, rendering and editing live in reusable library crates. The interface is one swappable layer on top.
-- **Scriptable.** The `nabu-cli` tool (see [Built for agents, too](#built-for-agents-too)) covers inspecting, rendering, extracting text, editing, combining, extracting pages and splitting. Robustness sweeps run on the same engine as the app.
+- **Scriptable.** The `parchfold-cli` tool (see [Built for agents, too](#built-for-agents-too)) covers inspecting, rendering, extracting text, editing, combining, extracting pages and splitting. Robustness sweeps run on the same engine as the app.
 
 ```sh
-nabu-cli info  form.pdf                                  # structure as JSON
-nabu-cli text  paper.pdf --page 3                        # reading-order text
-nabu-cli edit  in.pdf --rotate 1,2:90 --delete 5 --title "Q3" --out out.pdf
+parchfold-cli info  form.pdf                                  # structure as JSON
+parchfold-cli text  paper.pdf --page 3                        # reading-order text
+parchfold-cli edit  in.pdf --rotate 1,2:90 --delete 5 --title "Q3" --out out.pdf
 ```
 
 ---
@@ -270,27 +270,27 @@ nabu-cli edit  in.pdf --rotate 1,2:90 --delete 5 --title "Q3" --out out.pdf
 
 Every engine feature is reachable without the GUI, through one table of JSON-Schema-described tools: open, inspect, render pages to PNG, extract and find text, rotate, delete, move and insert pages, edit bookmarks and page labels, add, reply to, restyle and delete comments (highlight a phrase just by naming it), list and fill in form fields, protect with passwords, set metadata, undo and redo, save, combine, extract and split. Three front doors share it:
 
-- **`nabu-cli run`**, for one-off calls and JSON scripts:
+- **`parchfold-cli run`**, for one-off calls and JSON scripts:
 
   ```sh
-  nabu-cli tools                                        # every tool and its JSON Schema
-  nabu-cli run text_find doc=1 query=invoice            # key=value; values parse as JSON
-  nabu-cli run --script review.json                     # e.g. comment_add {"type": "highlight", "find": "total due"}
-  nabu-cli run --script steps.json --root ./work        # several steps in one session
-  nabu-cli run --script steps.json --report             # one JSON document: per step its number, tool, status, result or error
+  parchfold-cli tools                                        # every tool and its JSON Schema
+  parchfold-cli run text_find doc=1 query=invoice            # key=value; values parse as JSON
+  parchfold-cli run --script review.json                     # e.g. comment_add {"type": "highlight", "find": "total due"}
+  parchfold-cli run --script steps.json --root ./work        # several steps in one session
+  parchfold-cli run --script steps.json --report             # one JSON document: per step its number, tool, status, result or error
   ```
 
   With `--root`, every file the script's steps read or write stays in that directory, including the PNG a step saves with `"out"` (the script itself is read from wherever you name it).
 
-- **An MCP server**, for AI agents such as Claude. **It is opt-in:** PdfCraft never starts it on its own, and it opens no network port. It runs only while an agent launches `nabu-cli mcp`, talks over stdin/stdout, and stops when the agent disconnects. To enable it, add it to your agent's MCP configuration:
+- **An MCP server**, for AI agents such as Claude. **It is opt-in:** PdfCraft never starts it on its own, and it opens no network port. It runs only while an agent launches `parchfold-cli mcp`, talks over stdin/stdout, and stops when the agent disconnects. To enable it, add it to your agent's MCP configuration:
 
   ```json
-  { "mcpServers": { "nabu": { "command": "nabu-cli", "args": ["mcp", "--root", "/path/to/your/pdfs"] } } }
+  { "mcpServers": { "parchfold": { "command": "parchfold-cli", "args": ["mcp", "--root", "/path/to/your/pdfs"] } } }
   ```
 
   `--compact` shrinks the tool list the agent has to read: `tools/list` returns about ten core tools plus `tool_search` and `tool_call`, which find and run every other tool, so the list costs far fewer tokens. Every tool still works.
 
-  `--root` confines every file the agent can read or write to one directory. Builds that should not include the server at all can use `cargo build -p nabu-cli --no-default-features`.
+  `--root` confines every file the agent can read or write to one directory. Builds that should not include the server at all can use `cargo build -p parchfold-cli --no-default-features`.
 
 - **The Rust API** (`pdfcraft_automation::Automation::call`), for embedding.
 
@@ -298,21 +298,21 @@ Edits stay in memory, undoable, until `doc_save`. Saving to the same file append
 
 ### Driving the app itself
 
-Start the desktop app with `nabu --control ~/.pdfcraft-control.json` and an agent can see and operate the real interface: the widget tree with labels and positions (from the accessibility tree), clicks, typing, keys, commands, view options and screenshots. This is also off by default. It listens only on loopback, and every connection must present the random token written to that file, which only you can read.
+Start the desktop app with `parchfold --control ~/.pdfcraft-control.json` and an agent can see and operate the real interface: the widget tree with labels and positions (from the accessibility tree), clicks, typing, keys, commands, view options and screenshots. This is also off by default. It listens only on loopback, and every connection must present the random token written to that file, which only you can read.
 
-Keep the control file in a folder only you can write, not a shared one such as `/tmp`: another user could create the file there first and receive your commands. `nabu-cli ui` refuses a control file that is a symbolic link, and on macOS, Linux and FreeBSD one that another user owns or can read or write. The app doesn't start if it can't write the file.
+Keep the control file in a folder only you can write, not a shared one such as `/tmp`: another user could create the file there first and receive your commands. `parchfold-cli ui` refuses a control file that is a symbolic link, and on macOS, Linux and FreeBSD one that another user owns or can read or write. The app doesn't start if it can't write the file.
 
 ```sh
-nabu-cli ui --control ~/.pdfcraft-control.json inspect query=rotate      # find widgets
-nabu-cli ui --control ~/.pdfcraft-control.json click label="Organize pages"
-nabu-cli ui --control ~/.pdfcraft-control.json key key=K modifiers='["command"]'
-nabu-cli ui --control ~/.pdfcraft-control.json command id=comment.square   # pick a tool, then draw:
-nabu-cli ui --control ~/.pdfcraft-control.json drag from='[400,300]' to='[600,420]'
-nabu-cli ui --control ~/.pdfcraft-control.json screenshot --out window.png
-nabu-cli ui --control ~/.pdfcraft-control.json resize width=1200 height=800
-nabu-cli ui --control ~/.pdfcraft-control.json focus label="Read"
-nabu-cli ui --control ~/.pdfcraft-control.json inspect focused=true
-nabu-cli ui --control ~/.pdfcraft-control.json quit
+parchfold-cli ui --control ~/.pdfcraft-control.json inspect query=rotate      # find widgets
+parchfold-cli ui --control ~/.pdfcraft-control.json click label="Organize pages"
+parchfold-cli ui --control ~/.pdfcraft-control.json key key=K modifiers='["command"]'
+parchfold-cli ui --control ~/.pdfcraft-control.json command id=comment.square   # pick a tool, then draw:
+parchfold-cli ui --control ~/.pdfcraft-control.json drag from='[400,300]' to='[600,420]'
+parchfold-cli ui --control ~/.pdfcraft-control.json screenshot --out window.png
+parchfold-cli ui --control ~/.pdfcraft-control.json resize width=1200 height=800
+parchfold-cli ui --control ~/.pdfcraft-control.json focus label="Read"
+parchfold-cli ui --control ~/.pdfcraft-control.json inspect focused=true
+parchfold-cli ui --control ~/.pdfcraft-control.json quit
 ```
 
 `ui.panel` opens, closes or sizes a side panel: `{"panel":"tools"|"side","open":true|false,"width":320}`.
@@ -343,7 +343,7 @@ PdfCraft is a Cargo workspace of focused crates, layered so the core never depen
 | `pdfcraft-forms` | Interactive forms: the field model, filling with regenerated appearances, Clear form |
 | `pdfcraft-render` | Rendering, inspection and text extraction with reading order |
 | `pdfcraft-engine` | The façade every frontend uses: sessions, edits, undo, saving, the tool catalogue |
-| `pdfcraft-automation` | Agent control: the headless tool table, `nabu-cli run`, and the opt-in MCP server |
+| `pdfcraft-automation` | Agent control: the headless tool table, `parchfold-cli run`, and the opt-in MCP server |
 | `pdfcraft-ui-egui` | The desktop and web interface |
 
 **Quality gates.** Every change passes the same automated checks:
@@ -366,10 +366,10 @@ PdfCraft is a clean-room implementation. Its behaviour comes from the ISO 32000 
 Building needs Rust 1.95 or later.
 
 ```sh
-git clone https://github.com/storytold/pdfcraft
-cd nabu
+git clone --branch feat/enki-character https://github.com/tomblanchard312/Parchfold.git parchfold
+cd parchfold
 cargo xtask models                                # fetch the OCR models Scan & OCR needs (release builds include them)
-cargo run --release -p nabu -- some.pdf     # desktop app
+cargo run --release -p parchfold -- some.pdf     # desktop app
 cargo xtask demo-pdf                              # build the showcase PDF used in these screenshots
 cargo xtask screenshots                           # regenerate every screenshot in this README
 ```
@@ -387,7 +387,7 @@ edited PDFs):
 
 ```sh
 git clone https://github.com/storytold/craft-fonts ../craft-fonts
-CRAFT_FONTS_DIR=../craft-fonts cargo run --release -p nabu -- some.pdf
+CRAFT_FONTS_DIR=../craft-fonts cargo run --release -p parchfold -- some.pdf
 ```
 
 Each [GitHub release](https://github.com/storytold/pdfcraft/releases) has ready-made builds for macOS,
@@ -439,7 +439,7 @@ The summary is in **[ROADMAP.md](ROADMAP.md)**; the full assessment by dimension
 Installers and executables are code-signed.
 
 The portable zip runs from any folder, a USB stick included. Its `portable.txt` keeps the settings,
-logs and crash recovery in a `PdfCraftData` folder next to `nabu.exe`, so nothing is written to
+logs and crash recovery in a `PdfCraftData` folder next to `parchfold.exe`, so nothing is written to
 `%APPDATA%`; delete that file to use the normal per-user folders.
 
 The MSI installs for your account only by default, without administrator privileges. Choose
@@ -485,7 +485,7 @@ notarized. The MSI's manufacturer, shown as the publisher in Installed apps, is
 | Build | File | Notes |
 |---|---|---|
 | App, universal (Apple silicon + Intel) | `pdfcraft-<ver>-macos-universal.dmg` | Signed and notarized |
-| Command-line tool, universal | `nabu-cli-<ver>-macos-universal.zip` | Signed and notarized |
+| Command-line tool, universal | `parchfold-cli-<ver>-macos-universal.zip` | Signed and notarized |
 
 ### Linux
 
@@ -496,9 +496,9 @@ notarized. The MSI's manufacturer, shown as the publisher in Installed apps, is
 | Debian/Ubuntu | `pdfcraft-<ver>-linux-x86_64.deb` | `pdfcraft-<ver>-linux-aarch64.deb` | |
 | Fedora/RHEL/openSUSE | `pdfcraft-<ver>-linux-x86_64.rpm` | `pdfcraft-<ver>-linux-aarch64.rpm` | |
 | Tarball | `pdfcraft-<ver>-linux-x86_64.tar.gz` | `pdfcraft-<ver>-linux-aarch64.tar.gz` | Unpack anywhere |
-| Command-line tool | `nabu-cli-<ver>-linux-x86_64.tar.gz` | `nabu-cli-<ver>-linux-aarch64.tar.gz` | `nabu-cli` alone (and its opt-in MCP server), for servers, CI and agents |
+| Command-line tool | `parchfold-cli-<ver>-linux-x86_64.tar.gz` | `parchfold-cli-<ver>-linux-aarch64.tar.gz` | `parchfold-cli` alone (and its opt-in MCP server), for servers, CI and agents |
 
-RISC-V (riscv64) builds come as tarballs only: `pdfcraft-<ver>-linux-riscv64.tar.gz` and `nabu-cli-<ver>-linux-riscv64.tar.gz`. They are cross-compiled and need glibc 2.39 or newer (Ubuntu 24.04+, Debian 13+).
+RISC-V (riscv64) builds come as tarballs only: `pdfcraft-<ver>-linux-riscv64.tar.gz` and `parchfold-cli-<ver>-linux-riscv64.tar.gz`. They are cross-compiled and need glibc 2.39 or newer (Ubuntu 24.04+, Debian 13+).
 
 Every other Linux build needs glibc 2.35 or newer (Ubuntu 22.04+, Debian 12+, Fedora 36+, RHEL 10).
 
@@ -512,7 +512,7 @@ Every other Linux build needs glibc 2.35 or newer (Ubuntu 22.04+, Debian 12+, Fe
 
 | Build | File | Notes |
 |---|---|---|
-| Static site | `nabu-web-<ver>.zip` | Runs in a modern browser; host it on any static server |
+| Static site | `parchfold-web-<ver>.zip` | Runs in a modern browser; host it on any static server |
 
 ---
 
@@ -570,7 +570,7 @@ this license. They have been removed from this fork. The terms are in
 [`docs/brand/LICENSE-brand.txt`](docs/brand/LICENSE-brand.txt).
 
 <p align="center">
-  <sub>Nabu, forked from PdfCraft. Copyright (c) 2026 ArtCraft Team and the PdfCraft contributors, and the Nabu contributors.</sub>
+  <sub>Parchfold, forked from PdfCraft. Copyright (c) 2026 ArtCraft Team and the PdfCraft contributors, and the Parchfold contributors.</sub>
 </p>
 
 The Tools panel sits on the left, or on the right with Preferences ▸ Tools panel side. The rail stays at the right edge and opens one side panel beside it. Drag a panel's inner edge to resize it; widths are remembered. F4 shows or hides the side panel and Shift+F4 the Tools panel (also in the View menu); View ▸ Reset side panels restores the default arrangement.
