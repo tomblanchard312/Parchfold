@@ -308,3 +308,25 @@ fn menu_overflow_has_a_bundled_proportional_glyph() {
     let drawn = galley(&mut fonts, FontFamily::Proportional, 14.0, 1.0, "⋯");
     assert!(drawn.size().x > 0.0);
 }
+
+#[test]
+fn eridu_typography_roles_use_the_expected_faces_and_logical_sizes() {
+    use egui::TextStyle;
+
+    let ctx = egui::Context::default();
+    let fonts = font_definitions();
+    for kind in [ThemeKind::Light, ThemeKind::Dark] {
+        apply(&ctx, kind);
+        let style = ctx.global_style();
+        for (role, face, size) in [
+            (TextStyle::Body, "Inter", 44.0 / 3.0),
+            (TextStyle::Button, "Inter-Medium", 14.0),
+            (TextStyle::Heading, "Inter-SemiBold", 20.0),
+            (TextStyle::Monospace, "JetBrainsMono", 44.0 / 3.0),
+        ] {
+            let font = &style.text_styles[&role];
+            assert_eq!(font.size, size);
+            assert_eq!(fonts.families[&font.family][0], face);
+        }
+    }
+}
