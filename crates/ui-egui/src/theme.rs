@@ -424,10 +424,10 @@ pub fn semibold(size: f32) -> FontId {
     FontId::new(size, FontFamily::Name("semibold".into()))
 }
 
-// Eridu Typography v1 uses typographic points. egui uses logical pixels at 96 DPI.
-const ERIDU_BODY: f32 = 11.0 * 96.0 / 72.0;
-const ERIDU_CONTROL: f32 = 10.5 * 96.0 / 72.0;
-const ERIDU_HEADING: f32 = 15.0 * 96.0 / 72.0;
+// Keep the established logical sizes for Parchfold’s compact chrome.
+const ERIDU_BODY: f32 = 13.0;
+const ERIDU_CONTROL: f32 = 13.0;
+const ERIDU_HEADING: f32 = 17.0;
 
 pub(crate) fn document_tab_font() -> FontId {
     semibold(ERIDU_BODY)

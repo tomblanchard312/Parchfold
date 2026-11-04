@@ -319,10 +319,10 @@ fn eridu_typography_roles_use_the_expected_faces_and_logical_sizes() {
         apply(&ctx, kind);
         let style = ctx.global_style();
         for (role, face, size) in [
-            (TextStyle::Body, "Inter", 44.0 / 3.0),
-            (TextStyle::Button, "Inter-Medium", 14.0),
-            (TextStyle::Heading, "Inter-SemiBold", 20.0),
-            (TextStyle::Monospace, "JetBrainsMono", 44.0 / 3.0),
+            (TextStyle::Body, "Inter", 13.0),
+            (TextStyle::Button, "Inter-Medium", 13.0),
+            (TextStyle::Heading, "Inter-SemiBold", 17.0),
+            (TextStyle::Monospace, "JetBrainsMono", 13.0),
         ] {
             let font = &style.text_styles[&role];
             assert_eq!(font.size, size);

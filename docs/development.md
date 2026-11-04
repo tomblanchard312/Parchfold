@@ -177,6 +177,7 @@ to the shared egui style. Body text uses Inter Regular, menus and standard contr
 Medium, and in-app document tabs and headings use Inter SemiBold. Monospace UI uses JetBrains Mono.
 The system owns native window decorations and native menus. Parchfold's interface scale preference
 and the platform's text and display scaling apply to these defaults.
+Logical sizes follow Parchfold’s existing compact layout.
 
 Portable builds use the existing OFL faces documented in [Attribution](../ATTRIBUTION.md).
 Script and symbol fallbacks follow the existing language-aware font stack. PDF content fonts
