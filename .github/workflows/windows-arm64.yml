@@ -31,6 +31,6 @@ jobs:
     uses: storytold/craft-common-actions/.github/workflows/windows-arm64.yml@main
     with:
       app-name: parchfold
-      app-dir: Nabu
-      install-relative-path: Programs/ArtCraft/Nabu
+      app-dir: Parchfold
+      install-relative-path: Programs/ArtCraft/Parchfold
       install-scope: perUser
