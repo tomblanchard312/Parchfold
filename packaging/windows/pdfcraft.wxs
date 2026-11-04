@@ -67,7 +67,7 @@
 
     <StandardDirectory Id="ProgramFiles6432Folder">
       <Directory Id="CraftSuiteFolder" Name="ArtCraft">
-        <Directory Id="INSTALLFOLDER" Name="Nabu">
+        <Directory Id="INSTALLFOLDER" Name="Parchfold">
         <Directory Id="ModelsFolder" Name="models" />
       </Directory>
       </Directory>
