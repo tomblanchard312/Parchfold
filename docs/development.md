@@ -169,3 +169,17 @@ Relative includes resolve beside the config that contains them. Included directo
 digit-prefixed `*.conf` files, in lexical order; backups and disabled files are ignored. The scan
 limits each config to 1 MiB, visits at most 256 config files/directories, and bounds include depth
 to 16 and directory entries to 32,768. Cyclic includes are skipped.
+
+### Eridu UI typography
+
+Parchfold maps the [Eridu Typography v1 roles](https://github.com/tomblanchard312/EriduOs/issues/27)
+to the shared egui style. Body text uses Inter Regular, menus and standard controls use Inter
+Medium, and in-app document tabs and headings use Inter SemiBold. Monospace UI uses JetBrains Mono.
+The system owns native window decorations and native menus. Parchfold's interface scale preference
+and the platform's text and display scaling apply to these defaults.
+Logical sizes follow Parchfold’s existing compact layout.
+
+Portable builds use the existing OFL faces documented in [Attribution](../ATTRIBUTION.md).
+Script and symbol fallbacks follow the existing language-aware font stack. PDF content fonts
+are configured separately. The change adds no font package or system settings. Reverting the
+typography commit restores the previous application defaults.

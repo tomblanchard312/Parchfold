@@ -424,6 +424,15 @@ pub fn semibold(size: f32) -> FontId {
     FontId::new(size, FontFamily::Name("semibold".into()))
 }
 
+// Keep the established logical sizes for Parchfold’s compact chrome.
+const ERIDU_BODY: f32 = 13.0;
+const ERIDU_CONTROL: f32 = 13.0;
+const ERIDU_HEADING: f32 = 17.0;
+
+pub(crate) fn document_tab_font() -> FontId {
+    semibold(ERIDU_BODY)
+}
+
 /// Install the palette, widget styling, text sizes and right-to-left flag for the chosen theme.
 pub fn apply(ctx: &egui::Context, kind: ThemeKind) {
     // Keep the native window inherited. A concrete egui theme pins macOS's
@@ -484,10 +493,11 @@ pub fn apply(ctx: &egui::Context, kind: ThemeKind) {
         s.spacing.scroll.floating = true;
         s.spacing.scroll.floating_width = 3.0;
         s.spacing.scroll.foreground_color = true;
-        s.text_styles.insert(egui::TextStyle::Body, regular(13.0));
-        s.text_styles.insert(egui::TextStyle::Button, regular(13.0));
+        s.text_styles.insert(egui::TextStyle::Body, regular(ERIDU_BODY));
+        s.text_styles.insert(egui::TextStyle::Button, medium(ERIDU_CONTROL));
         s.text_styles.insert(egui::TextStyle::Small, regular(11.0));
-        s.text_styles.insert(egui::TextStyle::Heading, semibold(17.0));
+        s.text_styles.insert(egui::TextStyle::Heading, semibold(ERIDU_HEADING));
+        s.text_styles.insert(egui::TextStyle::Monospace, FontId::monospace(ERIDU_BODY));
         s.interaction.tooltip_delay = 0.35;
     });
     let style = ctx.global_style();

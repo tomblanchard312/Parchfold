@@ -384,7 +384,7 @@ fn tab_name(name: &str) -> String {
 /// The width a tab takes when nothing has to shrink.
 fn tab_natural_width(ui: &egui::Ui, t: &Tokens, name: &str) -> f32 {
     let label = tab_name(name);
-    ui.fonts_mut(|f| f.layout_no_wrap(label, theme::regular(13.0), t.text).size().x) + TAB_CHROME
+    ui.fonts_mut(|f| f.layout_no_wrap(label, theme::document_tab_font(), t.text).size().x) + TAB_CHROME
 }
 
 /// The widest any tab may be so that tabs of `natural` widths, `gap` apart, fit in `budget`:
@@ -429,7 +429,7 @@ struct TabSpec<'a> {
 
 fn tab(ui: &mut egui::Ui, spec: TabSpec<'_>, close: &mut Option<usize>) -> egui::Response {
     let TabSpec { id, theme: t, icon, name, file, dirty, active, index, cap, height, draggable } = spec;
-    let font = theme::regular(13.0);
+    let font = theme::document_tab_font();
     let mut label = tab_name(name);
     // A shrunk tab shows as much of its name as fits (the tooltip has all of it).
     if let Some(cap) = cap {
