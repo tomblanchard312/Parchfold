@@ -653,7 +653,7 @@ pub fn right_rail(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                 let edit = egui::TextEdit::singleline(&mut typed)
                     .id(id)
                     .align(egui::Align2::CENTER_CENTER)
-                    .font(theme::medium(12.0))
+                    .font(egui::FontId::new(12.0, eridu_style::fonts::numeric_semibold()))
                     .text_color(t.text)
                     .frame(egui::Frame::NONE)
                     .margin(RAIL_FIELD_MARGIN);
@@ -693,7 +693,7 @@ pub fn right_rail(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                         view.view_history(forward);
                     }
                 }
-                let font = theme::regular(11.0);
+                let font = egui::FontId::new(11.0, eridu_style::fonts::numeric());
                 let mut position = page_position(view.current, page_count, labels.get(view.current).map_or("", String::as_str));
                 if widgets::text_width(ui, &position, &font) > ui.available_width() {
                     position = page_count.to_string();
@@ -718,7 +718,7 @@ pub fn right_rail(app: &mut PdfCraftApp, ui: &mut egui::Ui) {
                 let edit = egui::TextEdit::singleline(&mut view.page_input)
                     .id(page_input_id)
                     .align(egui::Align2::CENTER_CENTER)
-                    .font(theme::medium(12.0))
+                    .font(egui::FontId::new(12.0, eridu_style::fonts::numeric_semibold()))
                     .frame(egui::Frame::NONE)
                     .margin(RAIL_FIELD_MARGIN);
                 let r = rail_field(ui, &t, edit)

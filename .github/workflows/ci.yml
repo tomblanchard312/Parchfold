@@ -67,9 +67,11 @@ jobs:
           assert enki_sdk({"name": "enki-speech-ui", "version": "0.2.0", "source": enki_source})
           assert not enki_sdk({"name": "other", "version": "0.2.0", "source": enki_source})
           assert not enki_sdk({"name": "enki-speech-ui", "version": "0.2.0", "source": enki_source + "x"})
+          eridu_source = "git+https://github.com/tomblanchard312/eridu-style.git?rev=d3b4cdc03706ac100fae2de907282575652b76ad#d3b4cdc03706ac100fae2de907282575652b76ad"
           bad = sorted({p["source"] for p in lock.get("package", [])
                         if p.get("source", "").startswith("git+")
-                        and not p["source"].startswith("git+https://github.com/storytold/") and not enki_sdk(p)})
+                        and not p["source"].startswith("git+https://github.com/storytold/") and not enki_sdk(p)
+                        and (p["name"], p["source"]) != ("eridu-style", eridu_source)})
           if bad:
               print("Git dependencies outside approved sources:", *bad, sep="\n")
               sys.exit(1)

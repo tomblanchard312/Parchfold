@@ -292,7 +292,10 @@ pub fn installed_font_definitions(cjk: CjkPreference) -> FontDefinitions {
         ] {
             let Some(data) = data else { continue };
             fonts.font_data.insert(name.to_owned(), data);
-            for stack in fonts.families.values_mut() {
+            for (family, stack) in &mut fonts.families {
+                if *family == eridu_style::fonts::icons() || *family == eridu_style::fonts::icons_fill() {
+                    continue;
+                }
                 stack.push(name.to_owned());
             }
         }
@@ -300,7 +303,10 @@ pub fn installed_font_definitions(cjk: CjkPreference) -> FontDefinitions {
         if let Some(data) = fallback(need) {
             fonts.font_data.insert(SYSTEM_FALLBACK.to_owned(), data);
             let japanese: Vec<String> = pdfcraft_fonts::ui_japanese_fonts().iter().map(|f| f.name()).collect();
-            for stack in fonts.families.values_mut() {
+            for (family, stack) in &mut fonts.families {
+                if *family == eridu_style::fonts::icons() || *family == eridu_style::fonts::icons_fill() {
+                    continue;
+                }
                 let at = match need {
                     Need::Other => None,
                     Need::Hans | Need::Hant => stack.iter().position(|n| japanese.contains(n)),
@@ -418,6 +424,25 @@ fn font_definitions_for_platform(prefer_hans: bool, platform: FontPolicyPlatform
         stack.extend(fallback.iter().cloned());
         fonts.families.insert(FontFamily::Name(fam.into()), stack);
     }
+    let mut shared = eridu_style::fonts::definitions();
+    use eridu_style::fonts as eridu;
+    for (family, faces) in [
+        (eridu::display(), &[eridu::DISPLAY][..]),
+        (eridu::numeric(), &[eridu::NUMERIC][..]),
+        (eridu::numeric_semibold(), &[eridu::NUMERIC_SEMIBOLD][..]),
+    ] {
+        fonts.families.insert(family, faces.iter().map(|name| (*name).to_owned()).chain(fallback.iter().cloned()).collect());
+        for name in faces {
+            fonts.font_data.insert((*name).to_owned(), shared.font_data.remove(*name).expect("Eridu face"));
+        }
+    }
+    for family in [eridu::icons(), eridu::icons_fill()] {
+        let stack = shared.families.remove(&family).expect("Eridu icon family");
+        for name in &stack {
+            fonts.font_data.insert(name.clone(), shared.font_data.remove(name).expect("Eridu icon face"));
+        }
+        fonts.families.insert(family, stack);
+    }
     fonts
 }
 
@@ -493,9 +518,9 @@ pub fn apply(ctx: &egui::Context, kind: ThemeKind) {
         // RTL languages mirror stock chrome (menus, combo boxes, scroll bars, headers).
         // Labels still get their paragraph direction explicitly from `bidi::ui_direction`.
         s.right_to_left = rtl;
-        s.spacing.item_spacing = egui::vec2(8.0, 6.0);
+        s.spacing.item_spacing = egui::vec2(eridu_style::space::SM, eridu_style::space::SM);
         s.spacing.button_padding = egui::vec2(10.0, 5.0);
-        s.spacing.menu_margin = egui::Margin::same(6);
+        s.spacing.menu_margin = egui::Margin::same(eridu_style::space::SM as i8);
         s.spacing.scroll.bar_width = 8.0;
         s.spacing.scroll.floating = true;
         s.spacing.scroll.floating_width = 3.0;
