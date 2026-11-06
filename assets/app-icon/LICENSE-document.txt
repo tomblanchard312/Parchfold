@@ -3,7 +3,7 @@ SPDX-License-Identifier: ISC AND (MIT OR Apache-2.0)
 
 The document outline and fold are adapted from Lucide file-text (lucide-static 1.49.0):
 https://github.com/lucide-icons/lucide
-The original is kept in assets/icons/file-text.svg.
+Original artwork: https://cdn.jsdelivr.net/npm/lucide-static@1.49.0/icons/file-text.svg.
 
 ISC License
 

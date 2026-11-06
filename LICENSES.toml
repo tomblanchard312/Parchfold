@@ -16,12 +16,12 @@ sha256 = "cd7032ea33b71427f188e34ffb4aee9d6868a57fd196037c5c8b2be03a2a0352"
 [[document]]
 source = "NOTICE"
 destination = "NOTICE"
-sha256 = "86cf61495f9c9cc803770e62ac6bc2ffa6224b43c363b8e5c1db2f8fc26fefd3"
+sha256 = "91b71891c1132527a97d96c1586e57899369e1a2491fae8007ed72f60873928a"
 
 [[document]]
 source = "assets/app-icon/LICENSE-document.txt"
 destination = "assets/app-icon/LICENSE-document.txt"
-sha256 = "64a3137e3d5cc41e5b78d2ad8dd9ddddd6588283f9f7b3128aa6a8a50852fb9a"
+sha256 = "51b9fb323567d93e8279a3563047894adcfee151fd03bfad9e9e86630bed14af"
 
 [[document]]
 source = "assets/app-icon/LICENSE.txt"
@@ -167,3 +167,8 @@ sha256 = "972965ced22d1cc89ca7f23f870e897e3ca843f2f8f3f5265e1a5ac680497fe7"
 source = "assets/icons/LICENSE-enki-character.txt"
 destination = "assets/icons/LICENSE-enki-character.txt"
 sha256 = "5785655998246227d34920c2e01a91f671831c96cdc9bd9deb8ad1e23d7475e9"
+
+[[document]]
+source = "assets/icons/LICENSE-phosphor.txt"
+destination = "assets/icons/LICENSE-phosphor.txt"
+sha256 = "b5b1f1da112d18ea2147decfd48ddc1bf2b5aeb6c265381579340e95b15a2bb2"

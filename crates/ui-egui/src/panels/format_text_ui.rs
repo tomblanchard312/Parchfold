@@ -6,7 +6,7 @@
 //! paragraph spacing, or line spacing and scale for added text) is shown
 //! disabled and says so.
 //!
-//! The icons are Lucide's (AGENTS.md §1); only the arrangement follows Acrobat.
+//! The icons are Phosphor's (AGENTS.md §1); only the arrangement follows Acrobat.
 
 use egui::{Align, Color32, CornerRadius, Layout, Rect, Sense, Stroke, vec2};
 use pdfcraft_engine::text_script::Script;
