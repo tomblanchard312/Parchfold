@@ -330,3 +330,16 @@ fn eridu_typography_roles_use_the_expected_faces_and_logical_sizes() {
         }
     }
 }
+
+#[test]
+fn eridu_palette_keeps_text_and_primary_actions_readable() {
+    for kind in [ThemeKind::Light, ThemeKind::Dark] {
+        let t = Tokens::for_kind(kind);
+        for surface in [t.chrome, t.panel, t.card, t.pasteboard, t.hover, t.selected] {
+            assert!(contrast(t.text, surface) >= 4.5);
+            assert!(contrast(t.text_muted, surface) >= 4.5);
+        }
+        assert!(contrast(t.on_primary, t.primary) >= 4.5);
+        assert!(contrast(t.accent, t.panel) >= 3.0);
+    }
+}

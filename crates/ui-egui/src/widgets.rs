@@ -133,7 +133,7 @@ pub fn mode_tab(ui: &mut egui::Ui, label: &str, active: bool) -> Response {
     theme::hand(resp)
 }
 
-/// Rounded pill button; `primary` fills with the accent.
+/// Rounded pill button; `primary` uses the primary action color.
 pub fn pill_button(ui: &mut egui::Ui, label: &str, primary: bool) -> Response {
     pill_button_marked(ui, label, primary, false)
 }
@@ -143,7 +143,7 @@ pub fn pill_button(ui: &mut egui::Ui, label: &str, primary: bool) -> Response {
 pub fn pill_button_marked(ui: &mut egui::Ui, label: &str, primary: bool, marked: bool) -> Response {
     let t = Tokens::get(ui.ctx());
     let font = theme::medium(12.5);
-    let text_color = if primary { Color32::WHITE } else { t.text };
+    let text_color = if primary { t.on_primary } else { t.text };
     // Dialog buttons are translated UI text: an explicit RTL base keeps an Arabic label right
     // to left even when its first strong character is Latin or a placeholder.
     let label_galley = crate::bidi::layout_ui(ui, label.to_owned(), font, text_color);
@@ -151,11 +151,7 @@ pub fn pill_button_marked(ui: &mut egui::Ui, label: &str, primary: bool, marked:
     let (rect, resp) = ui.allocate_exact_size(vec2(w + 26.0, 28.0), Sense::click());
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, ui.is_enabled(), label));
     let press = theme::Press::track(ui, &resp);
-    let (fill, stroke) = if primary {
-        (press.fill(t.accent, t.accent_text, t.accent.lerp_to_gamma(Color32::BLACK, 0.22)), Stroke::NONE)
-    } else {
-        (press.fill(t.card, t.hover, t.pressed), Stroke::new(1.0, t.border))
-    };
+    let (fill, stroke) = if primary { (t.primary, Stroke::NONE) } else { (press.fill(t.card, t.hover, t.pressed), Stroke::new(1.0, t.border)) };
     ui.painter().rect(rect, CornerRadius::same(14), fill, stroke, egui::StrokeKind::Inside);
     if marked {
         resp.request_focus();
@@ -651,7 +647,7 @@ pub fn split_pill(ui: &mut egui::Ui, icon: &str, label: &str, more: &str) -> (Re
     (theme::hand(main).on_hover_text(label), theme::hand(arrow).on_hover_text(more))
 }
 
-/// A pill button with an icon (primary = filled accent).
+/// A pill button with an icon (primary uses the action color).
 pub fn icon_pill(ui: &mut egui::Ui, icon: &str, label: &str, primary: bool) -> Response {
     let t = Tokens::get(ui.ctx());
     let font = theme::medium(12.5);
@@ -659,11 +655,8 @@ pub fn icon_pill(ui: &mut egui::Ui, icon: &str, label: &str, primary: bool) -> R
     let (rect, resp) = ui.allocate_exact_size(vec2(w + 46.0, 30.0), Sense::click());
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::Role::Button, ui.is_enabled(), label));
     let press = theme::Press::track(ui, &resp);
-    let (fill, stroke, text) = if primary {
-        (press.fill(t.accent, t.accent_text, t.accent.lerp_to_gamma(Color32::BLACK, 0.22)), Stroke::NONE, Color32::WHITE)
-    } else {
-        (press.fill(t.card, t.hover, t.pressed), Stroke::new(1.0, t.border), t.text)
-    };
+    let (fill, stroke, text) =
+        if primary { (t.primary, Stroke::NONE, t.on_primary) } else { (press.fill(t.card, t.hover, t.pressed), Stroke::new(1.0, t.border), t.text) };
     ui.painter().rect(rect, CornerRadius::same(15), fill, stroke, egui::StrokeKind::Inside);
     let body = rect.translate(press.offset());
     crate::icons::paint(ui, Rect::from_min_size(body.min + vec2(12.0, 7.0), vec2(16.0, 16.0)), icon, 15.0, text);

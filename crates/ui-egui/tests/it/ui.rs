@@ -1607,8 +1607,9 @@ fn the_drop_line_shows_in_front_of_the_first_tab() {
     let _gpu = crate::gpu();
     let mut h = three_tab_harness();
     let first = h.get_by_role_and_label(Role::Tab, "first.pdf").rect();
-    // Pixels in the strip just left of the first tab that are strongly blue (the accent line).
-    let blue_left_of = |h: &mut Harness<'static, PdfCraftApp>, rect: egui::Rect| {
+    // Count pixels matching the current theme’s accent line, allowing raster rounding.
+    let accent_left_of = |h: &mut Harness<'static, PdfCraftApp>, rect: egui::Rect| {
+        let accent = pdfcraft_ui_egui::theme::Tokens::get(&h.ctx).accent.to_array();
         let image = h.render().unwrap();
         let scale = image.width() as f32 / h.ctx.content_rect().width();
         let x0 = ((rect.left() - 3.0) * scale).max(0.0) as u32;
@@ -1618,18 +1619,18 @@ fn the_drop_line_shows_in_front_of_the_first_tab() {
         for y in y0..y1.min(image.height()) {
             for x in x0..x1.min(image.width()) {
                 let p = image.get_pixel(x, y).0;
-                if p[2] > 150 && p[0] < 90 && p[1] < 140 {
+                if p[..3].iter().zip(&accent[..3]).all(|(actual, expected)| actual.abs_diff(*expected) <= 12) {
                     n += 1;
                 }
             }
         }
         n
     };
-    let before = blue_left_of(&mut h, first);
+    let before = accent_left_of(&mut h, first);
     // last.pdf to the left of the first tab, released not yet.
     let to = first.left_center() - egui::vec2(10.0, 0.0);
     drag_named_tab(&mut h, "last.pdf", to, false);
-    let during = blue_left_of(&mut h, first);
+    let during = accent_left_of(&mut h, first);
     assert!(during > before + 10, "no drop line left of the first tab ({before} -> {during})");
     if let Ok(dir) = std::env::var("PDFCRAFT_TAB_SHOTS") {
         h.render().unwrap().save(format!("{dir}/dragging-to-front.png")).unwrap();

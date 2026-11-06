@@ -1649,7 +1649,7 @@ fn dialog_pin_tool(ui: &mut egui::Ui, app: &mut PdfCraftApp, req: &mut Pending) 
             let btn_hovered = btn_resp.hovered();
 
             let (btn_fill, btn_stroke, text_color, btn_label) = if pinned {
-                (t.accent, egui::Stroke::NONE, egui::Color32::WHITE, tl!("Pinned"))
+                (t.selected, egui::Stroke::NONE, t.text, tl!("Pinned"))
             } else if btn_hovered {
                 (t.hover, egui::Stroke::new(1.0, t.border), t.text, tl!("Pin"))
             } else {
