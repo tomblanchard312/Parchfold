@@ -1267,8 +1267,7 @@ pub(crate) enum ImageAction {
     Replace,
 }
 
-// Lucide names a flip icon after the axis it draws, Acrobat names the flip after the direction the
-// picture moves: Flip horizontal (left and right swap) shows Lucide's vertical axis.
+// Existing icon keys are kept stable. The Phosphor glyphs describe the flip direction.
 const FLIP_HORIZONTAL_ICON: &str = "flip-vertical-2";
 const FLIP_VERTICAL_ICON: &str = "flip-horizontal-2";
 
@@ -1461,17 +1460,7 @@ mod tests {
     }
 
     #[test]
-    fn flip_buttons_show_the_mirror_axis_of_the_flip_they_make() {
-        // #1834: Acrobat's Flip horizontal swaps left and right across a vertical axis. Lucide names
-        // its flip icons after the axis drawn, so that is its flip-vertical-2.
-        let svg = |name: &str| {
-            let (_, bytes) = crate::icon_data::ICONS.iter().find(|(n, _)| *n == name).expect("bundled icon");
-            String::from_utf8_lossy(bytes).into_owned()
-        };
-        let (h, v) = (svg(FLIP_HORIZONTAL_ICON), svg(FLIP_VERTICAL_ICON));
-        assert!(h.contains("M12 2v2") && !h.contains("M4 12H2"), "Flip horizontal draws a vertical axis:\n{h}");
-        assert!(v.contains("M4 12H2") && !v.contains("M12 2v2"), "Flip vertical draws a horizontal axis:\n{v}");
-
+    fn flip_buttons_mirror_in_the_labelled_direction() {
         let i = flipped("Flip horizontal");
         assert!(i.flip_h && !i.flip_v, "Flip horizontal mirrors left and right");
         let i = flipped("Flip vertical");

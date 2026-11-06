@@ -187,7 +187,7 @@ impl CommentTool {
         }
     }
 
-    /// Lucide icon name for this commenting tool.
+    /// Icon key for this commenting tool.
     pub fn icon(self) -> &'static str {
         match self {
             Self::Note => "message-square-plus",

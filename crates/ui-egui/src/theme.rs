@@ -433,13 +433,17 @@ fn font_definitions_for_platform(prefer_hans: bool, platform: FontPolicyPlatform
     ] {
         fonts.families.insert(family, faces.iter().map(|name| (*name).to_owned()).chain(fallback.iter().cloned()).collect());
         for name in faces {
-            fonts.font_data.insert((*name).to_owned(), shared.font_data.remove(*name).expect("Eridu face"));
+            if let Some(face) = shared.font_data.remove(*name) {
+                fonts.font_data.insert((*name).to_owned(), face);
+            }
         }
     }
     for family in [eridu::icons(), eridu::icons_fill()] {
-        let stack = shared.families.remove(&family).expect("Eridu icon family");
+        let Some(stack) = shared.families.remove(&family) else { continue };
         for name in &stack {
-            fonts.font_data.insert(name.clone(), shared.font_data.remove(name).expect("Eridu icon face"));
+            if let Some(face) = shared.font_data.remove(name) {
+                fonts.font_data.insert(name.clone(), face);
+            }
         }
         fonts.families.insert(family, stack);
     }

@@ -1577,7 +1577,7 @@ fn dialog_about(ui: &mut egui::Ui, req: &mut Pending) -> bool {
             });
             ui.label(
                 egui::RichText::new(
-                    "Rendering: hayro (bootstrap) · UI: egui · Icons: Lucide (ISC) · Fonts: Inter, JetBrains Mono, Dancing Script (OFL)",
+                    "Rendering: hayro (bootstrap) · UI: egui · Icons: Phosphor (MIT) · Fonts: Inter, JetBrains Mono, Dancing Script (OFL)",
                 )
                 .color(t.text_muted)
                 .small(),

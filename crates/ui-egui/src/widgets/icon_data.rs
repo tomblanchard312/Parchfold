@@ -1,4 +1,4 @@
-//! Lucide icons (ISC licence, see assets/icons/LICENSE-lucide.txt), embedded and tinted at runtime.
+//! Phosphor icons (MIT licence, see assets/icons/LICENSE-phosphor.txt), embedded and tinted at runtime.
 //! Generated from the contents of assets/icons/.
 
 pub static ICONS: &[(&str, &[u8])] = &[

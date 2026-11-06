@@ -19,6 +19,5 @@ with existing language fallbacks. Desktop theme and interface scaling remain use
 
 Parchfold supports Linux, FreeBSD, Windows, macOS, and the web. Platform-specific acceptance is tracked separately. The home heading uses Source Serif 4
 Display and page and zoom counters use Inter Tabular. Shared widget and menu spacing
-follow the Eridu grid. Mapped painted controls use Phosphor Regular and Fill. Remaining
-unmapped and image-backed controls still use their existing Lucide SVGs. Native accessibility
+follow the Eridu grid. Controls use Phosphor Regular SVGs and Phosphor Regular and Fill glyphs. The Windows PDF association artwork is attributed separately. Native accessibility
 and visual review are tracked separately from the automated UI harness.
