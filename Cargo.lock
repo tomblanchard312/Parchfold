@@ -4485,6 +4485,8 @@ dependencies = [
  "pdfcraft-model",
  "pdfcraft-organize",
  "pdfcraft-platform",
+ "pdfcraft-prc",
+ "pdfcraft-prc-render",
  "pdfcraft-render",
  "pdfcraft-xfa",
  "png 0.18.1",
@@ -4512,6 +4514,7 @@ version = "0.18.1"
 dependencies = [
  "chrono",
  "hayro-syntax",
+ "js-sys",
  "pdfcraft-crypt",
  "pdfcraft-filters",
  "pdfcraft-oracle",
@@ -4519,6 +4522,7 @@ dependencies = [
  "proptest",
  "serde_json",
  "thiserror 2.0.21",
+ "wasm-bindgen",
 ]
 
 [[package]]
@@ -4695,6 +4699,7 @@ version = "0.18.1"
 dependencies = [
  "ocrs",
  "pdfcraft-fonts",
+ "png 0.18.1",
  "rten",
  "tempfile",
  "thiserror 2.0.21",
@@ -4739,6 +4744,24 @@ dependencies = [
  "futures-lite",
  "rustix 1.1.5",
  "zbus",
+]
+
+[[package]]
+name = "pdfcraft-prc"
+version = "0.18.1"
+dependencies = [
+ "flate2",
+ "proptest",
+ "thiserror 2.0.21",
+]
+
+[[package]]
+name = "pdfcraft-prc-render"
+version = "0.18.1"
+dependencies = [
+ "flate2",
+ "pdfcraft-prc",
+ "thiserror 2.0.21",
 ]
 
 [[package]]
@@ -4874,6 +4897,7 @@ dependencies = [
  "pdfcraft-engine",
  "pdfcraft-fonts",
  "pdfcraft-model",
+ "pdfcraft-ocr",
  "pdfcraft-platform",
  "pdfcraft-render",
  "pdfcraft-xfa",
