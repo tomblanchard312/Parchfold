@@ -327,6 +327,8 @@ the document or the panels.
 
 ---
 
+[Parchfold UI design and Eridu adoption](docs/ui-design.md)
+
 ## How it's built
 
 PdfCraft is a Cargo workspace of focused crates, layered so the core never depends on the UI:

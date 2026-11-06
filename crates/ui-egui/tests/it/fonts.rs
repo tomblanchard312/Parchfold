@@ -24,6 +24,10 @@ fn families() -> Vec<FontId> {
 /// The bundled faces, with no craft-fonts and no installed system face: 0.37 gates its emoji
 /// fonts behind `monochrome_emoji_fonts`, which the app and this test crate explicitly enable.
 /// Text symbols must keep working with `PDFCRAFT_SYSTEM_FONTS=0`.
+fn is_icon_family(family: &FontFamily) -> bool {
+    *family == eridu_style::fonts::icons() || *family == eridu_style::fonts::icons_fill()
+}
+
 #[test]
 fn bundled_monochrome_symbols_have_glyphs() {
     let mut fonts = Fonts::new(TextOptions::default(), theme::font_definitions());
@@ -154,7 +158,7 @@ fn system_fallback_fills_missing_scripts() {
         assert!(defs.families.values().all(|stack| !stack.iter().any(|n| n == theme::SYSTEM_FALLBACK)));
         return;
     }
-    for (family, stack) in &defs.families {
+    for (family, stack) in defs.families.iter().filter(|(family, _)| !is_icon_family(family)) {
         assert_eq!(stack.last().map(String::as_str), Some(theme::SYSTEM_FALLBACK), "{family:?}: {stack:?}");
         assert_eq!(stack.iter().filter(|n| *n == theme::SYSTEM_FALLBACK).count(), 1, "{family:?}");
     }
@@ -177,7 +181,7 @@ fn system_fallback_covers_devanagari() {
         assert!(defs.families.values().all(|stack| !stack.iter().any(|n| n == theme::SYSTEM_DEVANAGARI_FALLBACK)));
         return;
     }
-    for (family, stack) in &defs.families {
+    for (family, stack) in defs.families.iter().filter(|(family, _)| !is_icon_family(family)) {
         assert!(stack.iter().any(|n| n == theme::SYSTEM_DEVANAGARI_FALLBACK), "{family:?}: {stack:?}");
         assert_eq!(stack.iter().filter(|n| *n == theme::SYSTEM_DEVANAGARI_FALLBACK).count(), 1, "{family:?}");
     }
@@ -226,7 +230,7 @@ fn system_fallback_covers_telugu() {
         assert!(defs.families.values().all(|stack| !stack.iter().any(|n| n == theme::SYSTEM_TELUGU_FALLBACK)));
         return;
     }
-    for (family, stack) in &defs.families {
+    for (family, stack) in defs.families.iter().filter(|(family, _)| !is_icon_family(family)) {
         assert_eq!(stack.iter().filter(|n| *n == theme::SYSTEM_TELUGU_FALLBACK).count(), 1, "{family:?}: {stack:?}");
     }
     let mut fonts = Fonts::new(TextOptions::default(), defs);
@@ -251,7 +255,7 @@ fn system_fallback_covers_sinhala_and_tamil() {
             assert!(defs.families.values().all(|stack| !stack.iter().any(|n| n == name)));
             continue;
         }
-        for (family, stack) in &defs.families {
+        for (family, stack) in defs.families.iter().filter(|(family, _)| !is_icon_family(family)) {
             assert_eq!(stack.iter().filter(|n| *n == name).count(), 1, "{family:?}: {stack:?}");
         }
         let mut fonts = Fonts::new(TextOptions::default(), defs);
@@ -275,7 +279,7 @@ fn system_fallback_covers_hebrew() {
         assert!(defs.families.values().all(|stack| !stack.iter().any(|n| n == theme::SYSTEM_HEBREW_FALLBACK)));
         return;
     }
-    for (family, stack) in &defs.families {
+    for (family, stack) in defs.families.iter().filter(|(family, _)| !is_icon_family(family)) {
         assert_eq!(stack.iter().filter(|n| *n == theme::SYSTEM_HEBREW_FALLBACK).count(), 1, "{family:?}: {stack:?}");
     }
     let mut fonts = Fonts::new(TextOptions::default(), defs);
@@ -299,7 +303,7 @@ fn catalog_han(catalog: &str) -> String {
     han.into_iter().collect()
 }
 
-/// One Chinese preference against its catalog: the installed face must be in every family,
+/// One Chinese preference against its catalog: the installed face must be in every text family,
 /// before the Japanese faces, and cover every Han character the catalog uses.
 ///
 /// Returns false when this machine has no installed face for the preference (or system fonts
@@ -311,8 +315,8 @@ fn installed_chinese_face_covers(cjk: theme::CjkPreference, catalog: &str, name:
         eprintln!("skipping {name}: no installed Chinese face for {cjk:?} (or PDFCRAFT_SYSTEM_FONTS=0)");
         return false;
     }
-    for (family, stack) in &defs.families {
-        let system = stack.iter().position(|n| n == theme::SYSTEM_FALLBACK).expect("in every family");
+    for (family, stack) in defs.families.iter().filter(|(family, _)| !is_icon_family(family)) {
+        let system = stack.iter().position(|n| n == theme::SYSTEM_FALLBACK).expect("in every text family");
         assert_eq!(stack.iter().filter(|n| *n == theme::SYSTEM_FALLBACK).count(), 1, "{family:?}");
         let own = stack.iter().position(|n| n.starts_with("Inter") || n == "JetBrainsMono").expect("the app's own font");
         assert!(own < system, "{family:?}: {stack:?}");
@@ -455,7 +459,7 @@ fn system_fallback_covers_hangul() {
         assert!(defs.families.values().all(|stack| !stack.iter().any(|n| n == theme::SYSTEM_HANGUL_FALLBACK)));
         return;
     }
-    for (family, stack) in &defs.families {
+    for (family, stack) in defs.families.iter().filter(|(family, _)| !is_icon_family(family)) {
         assert_eq!(stack.iter().filter(|n| *n == theme::SYSTEM_HANGUL_FALLBACK).count(), 1, "{family:?}: {stack:?}");
     }
     let mut fonts = Fonts::new(TextOptions::default(), defs);

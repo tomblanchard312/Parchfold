@@ -44,8 +44,126 @@ pub fn image(name: &str, size: f32, tint: Color32) -> egui::Image<'static> {
     egui::Image::new(source(name)).fit_to_exact_size(Vec2::splat(size)).tint(tint)
 }
 
+fn phosphor(name: &str) -> Option<&'static str> {
+    use eridu_style::icons::glyph::*;
+    Some(match name {
+        "align-left" => ALIGN_LEFT,
+        "align-right" => ALIGN_RIGHT,
+        "app-window" => APP_WINDOW,
+        "arrow-up-right" => ARROW_UP_RIGHT,
+        "bell" => BELL,
+        "book-open" => BOOK_OPEN,
+        "bookmark" => BOOKMARK,
+        "camera" => CAMERA,
+        "check" => CHECK,
+        "chevron-down" => CARET_DOWN,
+        "chevron-left" => CARET_LEFT,
+        "chevron-right" => CARET_RIGHT,
+        "chevron-up" => CARET_UP,
+        "circle" => CIRCLE,
+        "circle-check" => CHECK_CIRCLE,
+        "circle-dashed" => CIRCLE_DASHED,
+        "circle-help" => QUESTION,
+        "circle-x" => X_CIRCLE,
+        "clipboard-paste" => CLIPBOARD_TEXT,
+        "clock" => CLOCK,
+        "cloud" => CLOUD,
+        "code-xml" => CODE,
+        "compass" => COMPASS,
+        "copy" => COPY,
+        "crop" => CROP,
+        "ellipsis" => DOTS_THREE,
+        "eraser" => ERASER,
+        "external-link" => ARROW_SQUARE_OUT,
+        "eye" => EYE,
+        "file-code" => FILE_CODE,
+        "file-minus" => FILE_MINUS,
+        "file-plus" => FILE_PLUS,
+        "file-search" => FILE_SEARCH,
+        "file-spreadsheet" => FILE_XLS,
+        "file-text" => FILE_TEXT,
+        "file-x" => FILE_X,
+        "files" => FILES,
+        "folder" => FOLDER,
+        "folder-open" => FOLDER_OPEN,
+        "folder-plus" => FOLDER_PLUS,
+        "gauge" => GAUGE,
+        "globe" => GLOBE,
+        "hand" => HAND,
+        "hash" => HASH,
+        "highlighter" => HIGHLIGHTER_CIRCLE,
+        "house" => HOUSE,
+        "image" => IMAGE,
+        "info" => INFO,
+        "lasso" => LASSO,
+        "layout-grid" => GRID_FOUR,
+        "link" => LINK,
+        "list" => LIST,
+        "list-checks" => LIST_CHECKS,
+        "lock" => LOCK,
+        "lock-open" => LOCK_OPEN,
+        "maximize" => CORNERS_OUT,
+        "message-square-text" => CHAT_TEXT,
+        "minimize" => CORNERS_IN,
+        "minus" => MINUS,
+        "monitor" => MONITOR,
+        "moon" => MOON,
+        "mouse-pointer-2" => CURSOR,
+        "paint-bucket" => PAINT_BUCKET,
+        "palette" => PALETTE,
+        "panel-left" => SIDEBAR,
+        "panel-right" => SIDEBAR_SIMPLE,
+        "paperclip" => PAPERCLIP,
+        "pencil" => PENCIL,
+        "pentagon" => PENTAGON,
+        "plus" => PLUS,
+        "presentation" => PRESENTATION,
+        "printer" => PRINTER,
+        "redo-2" => ARROW_U_UP_RIGHT,
+        "rotate-ccw" => ARROW_COUNTER_CLOCKWISE,
+        "rotate-cw" => ARROW_CLOCKWISE,
+        "ruler" => RULER,
+        "save" => FLOPPY_DISK,
+        "scan" => SCAN,
+        "scan-text" => SCAN,
+        "scissors" => SCISSORS,
+        "search" => MAGNIFYING_GLASS,
+        "settings" => GEAR,
+        "settings-2" => SLIDERS_HORIZONTAL,
+        "shield-check" => SHIELD_CHECK,
+        "signature" => SIGNATURE,
+        "sliders-horizontal" => SLIDERS_HORIZONTAL,
+        "square" => SQUARE,
+        "stamp" => STAMP,
+        "star" => STAR,
+        "sun" => SUN,
+        "tag" => TAG,
+        "thumbs-down" => THUMBS_DOWN,
+        "thumbs-up" => THUMBS_UP,
+        "trash" => TRASH,
+        "trash-2" => TRASH,
+        "triangle-alert" => WARNING,
+        "type" => TEXT_T,
+        "undo-2" => ARROW_U_UP_LEFT,
+        "wrench" => WRENCH,
+        "x" => X,
+        "zoom-in" => MAGNIFYING_GLASS_PLUS,
+        "zoom-out" => MAGNIFYING_GLASS_MINUS,
+        _ => return None,
+    })
+}
+
 pub fn paint(ui: &egui::Ui, rect: Rect, name: &str, size: f32, tint: Color32) {
-    image(name, size, tint).paint_at(ui, Rect::from_center_size(rect.center(), Vec2::splat(size)));
+    paint_state(ui, rect, name, size, tint, false);
+}
+
+fn paint_state(ui: &egui::Ui, rect: Rect, name: &str, size: f32, tint: Color32, selected: bool) {
+    let family = if selected { eridu_style::fonts::icons_fill() } else { eridu_style::fonts::icons() };
+    if let Some(glyph) = phosphor(name).filter(|_| ui.fonts(|fonts| fonts.definitions().families.contains_key(&family))) {
+        ui.painter().text(rect.center(), egui::Align2::CENTER_CENTER, glyph, egui::FontId::new(size, family), tint);
+    } else {
+        image(name, size, tint).paint_at(ui, Rect::from_center_size(rect.center(), Vec2::splat(size)));
+    }
 }
 
 /// Square icon button: transparent until hovered; `selected` gets the accent treatment.
@@ -84,7 +202,7 @@ pub fn button(ui: &mut egui::Ui, name: &str, box_size: f32, selected: bool, tool
         ui.painter().set(wash, egui::Shape::Vec(shapes));
         // The glyph shrinks a little and drops a pixel while the pointer is down.
         let size = (box_size * 0.5).round() * (1.0 - 0.08 * press.down);
-        paint(ui, rect.translate(press.offset()), name, size, tint);
+        paint_state(ui, rect.translate(press.offset()), name, size, tint, selected);
     }
     let resp = theme::hand(resp);
     if tooltip.is_empty() { resp } else { resp.on_hover_text(tooltip) }

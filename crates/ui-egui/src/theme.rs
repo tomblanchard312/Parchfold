@@ -62,6 +62,8 @@ pub struct Tokens {
     pub accent: Color32,
     pub accent_text: Color32,
     pub accent_soft: Color32,
+    pub primary: Color32,
+    pub on_primary: Color32,
     pub field: Color32,
     pub badge_new: Color32,
     pub page_shadow: Color32,
@@ -69,55 +71,60 @@ pub struct Tokens {
 }
 
 impl Tokens {
+    // Eridu Design System colors.json at 53133f86434676a5bdcb249556d3c11b50e600e4.
     pub fn for_kind(kind: ThemeKind) -> Self {
         match kind {
             ThemeKind::Light => Self {
                 kind,
-                titlebar: Color32::from_rgb(0xE9, 0xE9, 0xEB),
+                titlebar: Color32::from_rgb(0xF1, 0xEE, 0xE8),
                 chrome: Color32::from_rgb(0xFF, 0xFF, 0xFF),
                 panel: Color32::from_rgb(0xFF, 0xFF, 0xFF),
-                pasteboard: Color32::from_rgb(0xF1, 0xF1, 0xF3),
+                pasteboard: Color32::from_rgb(0xFA, 0xF9, 0xF6),
                 card: Color32::from_rgb(0xFF, 0xFF, 0xFF),
-                border: Color32::from_rgb(0xDA, 0xDA, 0xDE),
-                divider: Color32::from_rgb(0xE8, 0xE8, 0xEB),
-                text: Color32::from_rgb(0x22, 0x22, 0x26),
-                text_muted: Color32::from_rgb(0x5E, 0x5E, 0x66),
-                text_faint: Color32::from_rgb(0x6B, 0x6B, 0x73),
-                icon: Color32::from_rgb(0x44, 0x44, 0x4B),
-                hover: Color32::from_rgb(0xF0, 0xF0, 0xF3),
-                pressed: Color32::from_rgb(0xE4, 0xE4, 0xE9),
-                selected: Color32::from_rgb(0xE6, 0xEE, 0xFD),
-                accent: Color32::from_rgb(0x1B, 0x63, 0xE0),
-                accent_text: Color32::from_rgb(0x17, 0x55, 0xC4),
-                accent_soft: Color32::from_rgb(0xE3, 0xEC, 0xFD),
-                field: Color32::from_rgb(0xFF, 0xFF, 0xFF),
-                badge_new: Color32::from_rgb(0x1B, 0x63, 0xE0),
+                border: Color32::from_rgb(0xC7, 0xCD, 0xD0),
+                divider: Color32::from_rgb(0xC7, 0xCD, 0xD0),
+                text: Color32::from_rgb(0x20, 0x2C, 0x33),
+                text_muted: Color32::from_rgb(0x47, 0x59, 0x62),
+                text_faint: Color32::from_rgb(0x47, 0x59, 0x62),
+                icon: Color32::from_rgb(0x47, 0x59, 0x62),
+                hover: Color32::from_rgb(0xEE, 0xF3, 0xF4),
+                pressed: Color32::from_rgb(0xE3, 0xEE, 0xF1),
+                selected: Color32::from_rgb(0xE3, 0xEE, 0xF1),
+                accent: Color32::from_rgb(0x24, 0x6B, 0x83),
+                accent_text: Color32::from_rgb(0x24, 0x6B, 0x83),
+                accent_soft: Color32::from_rgb(0xE3, 0xEE, 0xF1),
+                primary: Color32::from_rgb(0x94, 0x59, 0x2C),
+                on_primary: Color32::from_rgb(0xFF, 0xFF, 0xFF),
+                field: Color32::from_rgb(0xF1, 0xEE, 0xE8),
+                badge_new: Color32::from_rgb(0x24, 0x6B, 0x83),
                 page_shadow: Color32::from_black_alpha(34),
-                radius: 6,
+                radius: 8,
             },
             ThemeKind::Dark => Self {
                 kind,
-                titlebar: Color32::from_rgb(0x1B, 0x1B, 0x1E),
-                chrome: Color32::from_rgb(0x26, 0x26, 0x2A),
-                panel: Color32::from_rgb(0x26, 0x26, 0x2A),
-                pasteboard: Color32::from_rgb(0x19, 0x19, 0x1C),
-                card: Color32::from_rgb(0x2E, 0x2E, 0x33),
-                border: Color32::from_rgb(0x3C, 0x3C, 0x43),
-                divider: Color32::from_rgb(0x33, 0x33, 0x39),
-                text: Color32::from_rgb(0xEC, 0xEC, 0xEF),
-                text_muted: Color32::from_rgb(0xAE, 0xAE, 0xB6),
-                text_faint: Color32::from_rgb(0x97, 0x97, 0x9E),
-                icon: Color32::from_rgb(0xD4, 0xD4, 0xDA),
-                hover: Color32::from_rgb(0x34, 0x34, 0x3A),
-                pressed: Color32::from_rgb(0x3E, 0x3E, 0x45),
-                selected: Color32::from_rgb(0x23, 0x3A, 0x63),
-                accent: Color32::from_rgb(0x4B, 0x8B, 0xF5),
-                accent_text: Color32::from_rgb(0x8C, 0xB6, 0xFA),
-                accent_soft: Color32::from_rgb(0x24, 0x36, 0x57),
-                field: Color32::from_rgb(0x1E, 0x1E, 0x22),
-                badge_new: Color32::from_rgb(0x3D, 0x7D, 0xEE),
+                titlebar: Color32::from_rgb(0x29, 0x3A, 0x43),
+                chrome: Color32::from_rgb(0x20, 0x2C, 0x33),
+                panel: Color32::from_rgb(0x20, 0x2C, 0x33),
+                pasteboard: Color32::from_rgb(0x17, 0x23, 0x2B),
+                card: Color32::from_rgb(0x20, 0x2C, 0x33),
+                border: Color32::from_rgb(0x71, 0x81, 0x8A),
+                divider: Color32::from_rgb(0x71, 0x81, 0x8A),
+                text: Color32::from_rgb(0xF7, 0xF7, 0xF4),
+                text_muted: Color32::from_rgb(0xD0, 0xD9, 0xDE),
+                text_faint: Color32::from_rgb(0xD0, 0xD9, 0xDE),
+                icon: Color32::from_rgb(0xD0, 0xD9, 0xDE),
+                hover: Color32::from_rgb(0x25, 0x37, 0x40),
+                pressed: Color32::from_rgb(0x30, 0x50, 0x5F),
+                selected: Color32::from_rgb(0x30, 0x50, 0x5F),
+                accent: Color32::from_rgb(0x83, 0xC9, 0xE0),
+                accent_text: Color32::from_rgb(0x83, 0xC9, 0xE0),
+                accent_soft: Color32::from_rgb(0x30, 0x50, 0x5F),
+                primary: Color32::from_rgb(0xE0, 0xA4, 0x72),
+                on_primary: Color32::from_rgb(0x10, 0x23, 0x2D),
+                field: Color32::from_rgb(0x29, 0x3A, 0x43),
+                badge_new: Color32::from_rgb(0x83, 0xC9, 0xE0),
                 page_shadow: Color32::from_black_alpha(120),
-                radius: 6,
+                radius: 8,
             },
         }
     }
@@ -285,7 +292,10 @@ pub fn installed_font_definitions(cjk: CjkPreference) -> FontDefinitions {
         ] {
             let Some(data) = data else { continue };
             fonts.font_data.insert(name.to_owned(), data);
-            for stack in fonts.families.values_mut() {
+            for (family, stack) in &mut fonts.families {
+                if *family == eridu_style::fonts::icons() || *family == eridu_style::fonts::icons_fill() {
+                    continue;
+                }
                 stack.push(name.to_owned());
             }
         }
@@ -293,7 +303,10 @@ pub fn installed_font_definitions(cjk: CjkPreference) -> FontDefinitions {
         if let Some(data) = fallback(need) {
             fonts.font_data.insert(SYSTEM_FALLBACK.to_owned(), data);
             let japanese: Vec<String> = pdfcraft_fonts::ui_japanese_fonts().iter().map(|f| f.name()).collect();
-            for stack in fonts.families.values_mut() {
+            for (family, stack) in &mut fonts.families {
+                if *family == eridu_style::fonts::icons() || *family == eridu_style::fonts::icons_fill() {
+                    continue;
+                }
                 let at = match need {
                     Need::Other => None,
                     Need::Hans | Need::Hant => stack.iter().position(|n| japanese.contains(n)),
@@ -411,6 +424,25 @@ fn font_definitions_for_platform(prefer_hans: bool, platform: FontPolicyPlatform
         stack.extend(fallback.iter().cloned());
         fonts.families.insert(FontFamily::Name(fam.into()), stack);
     }
+    let mut shared = eridu_style::fonts::definitions();
+    use eridu_style::fonts as eridu;
+    for (family, faces) in [
+        (eridu::display(), &[eridu::DISPLAY][..]),
+        (eridu::numeric(), &[eridu::NUMERIC][..]),
+        (eridu::numeric_semibold(), &[eridu::NUMERIC_SEMIBOLD][..]),
+    ] {
+        fonts.families.insert(family, faces.iter().map(|name| (*name).to_owned()).chain(fallback.iter().cloned()).collect());
+        for name in faces {
+            fonts.font_data.insert((*name).to_owned(), shared.font_data.remove(*name).expect("Eridu face"));
+        }
+    }
+    for family in [eridu::icons(), eridu::icons_fill()] {
+        let stack = shared.families.remove(&family).expect("Eridu icon family");
+        for name in &stack {
+            fonts.font_data.insert(name.clone(), shared.font_data.remove(name).expect("Eridu icon face"));
+        }
+        fonts.families.insert(family, stack);
+    }
     fonts
 }
 
@@ -486,9 +518,9 @@ pub fn apply(ctx: &egui::Context, kind: ThemeKind) {
         // RTL languages mirror stock chrome (menus, combo boxes, scroll bars, headers).
         // Labels still get their paragraph direction explicitly from `bidi::ui_direction`.
         s.right_to_left = rtl;
-        s.spacing.item_spacing = egui::vec2(8.0, 6.0);
+        s.spacing.item_spacing = egui::vec2(eridu_style::space::SM, eridu_style::space::SM);
         s.spacing.button_padding = egui::vec2(10.0, 5.0);
-        s.spacing.menu_margin = egui::Margin::same(6);
+        s.spacing.menu_margin = egui::Margin::same(eridu_style::space::SM as i8);
         s.spacing.scroll.bar_width = 8.0;
         s.spacing.scroll.floating = true;
         s.spacing.scroll.floating_width = 3.0;
