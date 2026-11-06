@@ -39,6 +39,7 @@ pub const SCENES: &[(&str, &str, &str, &[&str])] = &[
         "README: layouts",
         &["--layout", "two-up", "--mode", "read", "--page", "4", "--theme", "dark", "--notice", "off"],
     ),
+    ("pdfcraft-ocr-verify", "OCR Verify screen", "README: OCR review", &["--size", "1680x1000", "--ocr-verify", "on"]),
 ];
 
 const PDF: &str = "dist/demo/pdfcraft-showcase.pdf";
@@ -106,12 +107,16 @@ fn update_attribution(root: &Path) -> Result<()> {
         let stem = file.trim_end_matches(".png");
         let scene = SCENES.iter().find(|(n, ..)| *n == stem);
         let (title, usage) = scene.map(|(_, t, u, _)| (*t, *u)).unwrap_or(("PdfCraft screenshot", "README"));
-        // This fork does not ship the ArtCraft mark. A regenerated screenshot must not include it.
+        // The home screen shows the ArtCraft mark: say so (it is a Storyteller trademark, not open
+        // source; AGENTS.md §1.2), so the screenshot's licence is not read as covering it.
         let shows_home = scene.is_some_and(|(.., args)| args.windows(2).any(|w| w[0] == "--home" && w[1] == "on"));
-        let contents = if shows_home {
-            "Shows the Parchfold UI, Lucide icons and the showcase PDF built from the [[fetched]] OFL fonts"
+        let shows_ocr = scene.is_some_and(|(.., args)| args.windows(2).any(|w| w[0] == "--ocr-verify" && w[1] == "on"));
+        let contents = if shows_ocr {
+            "Shows only Parchfold UI, its Phosphor icons and a synthetic scanned page built from the embedded fonts, with a real recognition (the OCR models) loaded into the Verify screen"
+        } else if shows_home {
+            "Shows Parchfold UI, Phosphor icons and the showcase PDF built from the [[fetched]] OFL fonts"
         } else {
-            "Shows only PdfCraft UI, Lucide icons and the showcase PDF built from the [[fetched]] OFL fonts"
+            "Shows only Parchfold UI, Phosphor icons and the showcase PDF built from the [[fetched]] OFL fonts"
         };
         let bytes = std::fs::read(root.join("docs/images").join(file))?;
         out.push_str(&format!(

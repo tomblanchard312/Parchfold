@@ -232,11 +232,10 @@ mod tests {
 
     #[test]
     fn shared_catalog_preserves_existing_icons_and_fallback_uri() {
-        assert_eq!(ICONS.len(), 190);
+        assert_eq!(ICONS.len(), 191);
         assert!(exists("minimize-2"));
         for (name, original) in ICONS {
-            let expected =
-                String::from_utf8_lossy(original).replace("currentColor", "#ffffff").replace("stroke-width=\"2\"", "stroke-width=\"1.75\"");
+            let expected = String::from_utf8_lossy(original).replace("currentColor", "#ffffff");
             let egui::ImageSource::Bytes { uri, bytes } = source(name) else { panic!("expected SVG bytes") };
             assert_eq!(uri.as_ref(), format!("bytes://icons/{name}.svg"));
             assert_eq!(bytes.as_ref(), expected.as_bytes(), "{name}");
