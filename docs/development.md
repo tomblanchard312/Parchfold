@@ -172,7 +172,7 @@ to 16 and directory entries to 32,768. Cyclic includes are skipped.
 
 ### Eridu UI typography
 
-Parchfold maps the [Eridu Typography v1 roles](https://github.com/tomblanchard312/EriduOs/issues/27)
+Parchfold maps the [Eridu Typography v1 roles](https://github.com/tomblanchard312/TavruOS/issues/27)
 to the shared egui style. Body text uses Inter Regular, menus and standard controls use Inter
 Medium, and in-app document tabs and headings use Inter SemiBold. Monospace UI uses JetBrains Mono.
 The system owns native window decorations and native menus. Parchfold's interface scale preference

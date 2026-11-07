@@ -1,7 +1,7 @@
 # Parchfold UI design
 
 Parchfold serves people reading, editing, reviewing, and signing PDFs. It follows the
-[Eridu Design System](https://github.com/tomblanchard312/EriduOs/tree/53133f86434676a5bdcb249556d3c11b50e600e4/design-system)
+[Eridu Design System](https://github.com/tomblanchard312/TavruOS/tree/53133f86434676a5bdcb249556d3c11b50e600e4/design-system)
 workspace pattern. The toolbar and document tabs sit above a central PDF canvas, with
 tool navigation and inspectors beside it. Use the File menu or Ctrl+O to open a
 document, and the command palette to find tools by name. Native menu shortcuts follow
