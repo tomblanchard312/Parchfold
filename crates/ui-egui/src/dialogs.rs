@@ -1573,7 +1573,7 @@ fn dialog_about(ui: &mut egui::Ui, req: &mut Pending) -> bool {
             ui.label(egui::RichText::new(tl!("Based on PdfCraft.")).color(t.text_muted));
             ui.horizontal(|ui| {
                 crate::widgets::icons::enki_badge(ui);
-                ui.hyperlink_to("Enki · shared local AI runtime", "https://github.com/tomblanchard312/Enki");
+                ui.hyperlink_to("Oqelith · shared local AI runtime", "https://github.com/tomblanchard312/Oqelith");
             });
             ui.label(
                 egui::RichText::new(
