@@ -5,6 +5,10 @@ on:
     branches: [release]
   workflow_dispatch:
     inputs:
+      validate-only:
+        description: Check private release dependency access without publishing
+        type: boolean
+        default: false
       version:
         description: "Version override for a test run, e.g. 0.2.0-rc.1 (empty: Cargo.toml)"
         type: string
@@ -20,14 +24,16 @@ concurrency:
 
 jobs:
   release:
-    # Intentionally tracked at @main (not SHA-pinned) so org-wide CI improvements, security fixes, and build optimizations propagate without PR churn across all craftapp repos.
-    uses: storytold/craft-common-actions/.github/workflows/release.yml@main
+    uses: tomblanchard312/craft-common-actions/.github/workflows/private-release.yml@b8680be5cf185c014537b81281c009692af9930d
     with:
       app-name: parchfold
       app-title: Parchfold
       craft-fonts-ref: b076417b5880bd4154bd22f00695b1d28c6bea83
       version: ${{ inputs.version }}
+      validate-only: ${{ inputs.validate-only || false }}
+      allowed-git-packages: "[[\"enki-speech-ui\",\"git+https://github.com/tomblanchard312/Qanloom.git?rev=719d09989e86593ed84c6129d829df6a2e8ab1d0#719d09989e86593ed84c6129d829df6a2e8ab1d0\"],[\"eridu-style\",\"git+https://github.com/tomblanchard312/eridu-style.git?rev=d3b4cdc03706ac100fae2de907282575652b76ad#d3b4cdc03706ac100fae2de907282575652b76ad\"],[\"sharedai-client\",\"git+https://github.com/tomblanchard312/Qanloom.git?rev=719d09989e86593ed84c6129d829df6a2e8ab1d0#719d09989e86593ed84c6129d829df6a2e8ab1d0\"],[\"sharedai-protocol\",\"git+https://github.com/tomblanchard312/Qanloom.git?rev=719d09989e86593ed84c6129d829df6a2e8ab1d0#719d09989e86593ed84c6129d829df6a2e8ab1d0\"]]"
     secrets:
+      ERIDU_STYLE_DEPLOY_KEY: ${{ secrets.ERIDU_STYLE_DEPLOY_KEY }}
       APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
       APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
       KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
